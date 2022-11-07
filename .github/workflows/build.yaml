@@ -1,0 +1,48 @@
+name: mes-factory
+on:
+  push:
+    branches: [ master ]
+jobs:
+  remove-old-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Remove old artifacts
+      uses: c-hive/gha-remove-artifacts@v1
+      with:
+        age: '0 day'
+  mes_factory_build:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Login docker hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        id: buildx
+      - name: Cache Docker Image Layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build and Push docker Image
+        uses: docker/build-push-action@v2
+        id: docker_build
+        with: 
+          context: ./techpro.zapp
+          file: ./techpro.zapp/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true 
+          tags: ${{ secrets.DOCKERHUB_USERNAME}}/mes_factory
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache

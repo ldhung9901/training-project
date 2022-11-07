@@ -1,0 +1,55 @@
+<div class="flex flex-col flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium"> <span transloco="NAV.sys_item_bom"></span>:
+            &nbsp;<span>1</span>
+            <span>{{record.sys_item_unit_name}}</span>
+            &nbsp; <span>{{record.sys_item_name}}</span>
+        </div>
+        <button mat-icon-button (click)="closeCustom()">
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-7 text-white"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+         <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel"
+                              [actionEnum]="actionEnum"
+                              [label]="'system.name'"
+                              [keyError]="'db.name'"
+                              [(model)]="record.db.name"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_select_server_side [label]="'NAV.sys_item_specification'"
+                                           [link]="'/sys_item_specification.ctr/getListUse/'"
+                                           [(objectChose)]="item_chose_specification"
+                                           [listData]="listData_specification"
+                                           [dataFilter]="dataFilter_specification"
+                                           [callbackChange]="bind_data_item_specification_chose.bind(this)"
+                                           [(model)]="record.db.id_specification"></cm_select_server_side>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel"
+                              [actionEnum]="actionEnum"
+                              [label]="'system.note'"
+                              [keyError]="'db.note'"
+                              [(model)]="record.db.note"></cm_input>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="flex flex-row justify-end space-x-2">
+            <button class="dark:bg-teal-900 ring-white ring-2 dark:hover:bg-teal-700 dark:ring-teal-600 bg-teal-400 text-white shadow-none hover:bg-teal-600" *ngIf="actionEnum!=3" [disabled]="loading" mat-raised-button (click)="save_config()"
+                transloco="save"></button>
+            <!-- <button class="hidden sm:inline-flex" mat-stroked-button (click)="close()">
+                <span transloco="close"></span>
+            </button> -->
+        </div>
+    </div>
+</div>

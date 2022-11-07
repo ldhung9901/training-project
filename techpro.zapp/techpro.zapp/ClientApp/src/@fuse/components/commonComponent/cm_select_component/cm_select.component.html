@@ -1,0 +1,41 @@
+
+<mat-form-field class="w-full" *ngIf="type=='single'" [class.mat-form-field-disabled]="actionEnum === 3">
+    <mat-label *ngIf="label">
+        {{label | transloco}}
+        <span class="text-red-500 italic font-semibold" *ngFor="let item of errorModel | filterCorrect : 'key' : keyError ;  index as i;">
+            (<span *ngFor="let msg of item.value">
+                {{msg | transloco}}
+            </span>)
+        </span>
+    </mat-label>
+    <mat-select [(ngModel)]="model" (ngModelChange)="modelChange.emit(model);setChose($event)" #singleSelect [disabled]="actionEnum === 3">
+        <mat-option>
+            <ngx-mat-select-search [(ngModel)]="search" placeholderLabel="{{ 'search' | transloco }}"
+                noEntriesFoundLabel="{{'no_data' | transloco }}"></ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let it of listData | filter : 'name' : search" [value]="it.id">
+            {{it.name}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field class="w-full" *ngIf="type=='multiple'" [class.mat-form-field-disabled]="actionEnum === 3">
+    <mat-label>
+        {{label | transloco}}
+        <span class="text-red-500 italic font-semibold" *ngFor="let item of errorModel | filterCorrect : 'key' : keyError ;  index as i;">
+            (<span *ngFor="let msg of item.value">
+                {{msg | transloco}}
+            </span>)
+        </span>
+    </mat-label>
+    <mat-select [(ngModel)]="model" (ngModelChange)="modelChange.emit(model);setChose($event)" multiple [disabled]="actionEnum === 3">
+        <mat-option>
+            <ngx-mat-select-search [(ngModel)]="search"
+                                   placeholderLabel="{{ 'search' | transloco }}"
+                                   noEntriesFoundLabel="{{'no_data' | transloco }}"></ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let it of listData | filter : 'name' : search" [value]="it.id">
+            {{it.name}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>

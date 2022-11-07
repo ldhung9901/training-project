@@ -1,0 +1,104 @@
+<div class="flex flex-col flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium" transloco="NAV.sys_working_time_config"></div>
+        <button mat-icon-button (click)="closeCustom()">
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-7 text-white"></mat-icon>
+        </button>
+    </div>
+
+    <div class="w-full sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+        <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'ID'"
+                        [keyError]="'db.name'" [(model)]="record.db.name"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'inventory.estimated_maintenance_date'"
+                        [type]="'datepicker'" [keyError]="'db.schedual_date'" [(model)]="record.db.schedual_date">
+                    </cm_input>
+                </div>
+                <div class="flex-1">
+                </div>
+
+                <button
+                class="ring-white ring-2 dark:hover:bg-gray-700 dark:ring-gray-600 bg-gray-600 text-white shadow-none hover:bg-gray-500 mr-3 mt-6"
+                *ngIf="actionEnum!=3" [disabled]="loading" mat-raised-button (click)="generateSchedual()"
+                transloco="maintenance.generateSchedual">
+            </button>
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'note'"
+                        [keyError]="'db.note'" [(model)]="record.db.note"></cm_input>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-full sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+
+        <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="w-full">
+                <div> <span class="text-red-500 italic font-semibold"
+                        *ngFor="let item of errorModel | filter : 'key' : 'list_schedule' ; index as i;"> (<span
+                            *ngFor="let msg of item.value"> {{msg | transloco}} </span>) </span>
+                    <nz-table nzBordered="true" nzSize="small" #basicTable1 [nzLoading]="loading"
+                        nzShowPagination="true" [(nzData)]="record.list_schedule">
+                        <thead>
+                            <tr align="center">
+                                <th colspan="2" transloco="day"></th>
+                                <th colspan="3" transloco="system.working_time"></th>
+                                <th rowspan="2" transloco="system.off"></th>
+                                <th rowspan="2" transloco="note"></th>
+                            </tr>
+                            <tr align="center">
+                                <th transloco="day"></th>
+                                <th transloco="system.daysOfWeek"></th>
+                                <th transloco="system.shift_1"></th>
+                                <th transloco="system.shift_2"></th>
+                                <th transloco="system.full_day"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of basicTable1.data; index as i;" [class.bg-yellow-100]="isYellow(item)">
+                                <td>
+                                    <span> {{ item.db.estimate_check_date | date: "dd/MM/yyyy"}}</span>
+                                </td>
+                                <td>
+                                    <span> {{ item.db.estimate_check_date | date: "EEEE"}}</span>
+                                </td>
+                                <td>
+                                    <input *ngIf="actionEnum!=3" type="number" nz-input [(ngModel)]="item.db.shift_1" />
+                                    <span *ngIf="actionEnum==3"> {{ item.db.shift_1}}</span>
+                                </td>
+                                <td nzAlign="center">
+                                    <input *ngIf="actionEnum!=3" type="number" nz-input [(ngModel)]="item.db.shift_2" />
+                                    <span *ngIf="actionEnum==3"> {{ item.db.shift_2}}</span>
+                                </td>
+
+                                <td> {{ item.db.shift_1 + item.db.shift_2}}</td>
+                                <td nzAlign="center">
+                                    <label nz-checkbox [(ngModel)]="item.db.is_off"></label>
+                                </td>
+                                <td>
+                                    <input *ngIf="actionEnum!=3" type="text" nz-input [(ngModel)]="item.db.note" />
+                                    <span *ngIf="actionEnum==3"> {{ item.db.note}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="flex flex-row justify-end space-x-2">
+            <button *ngIf="actionEnum!=3" (click)="save()" mat-flat-button [color]="'primary'">
+                <label transloco="save"></label>
+            </button>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,169 @@
+<div class="flex flex-col flex-auto min-w-screen-60 md:min-w-200 max-h-200 -m-6 overflow-y-auto">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium" transloco="NAV.sys_group_user"></div>
+        <button mat-icon-button (click)="closeCustom()">
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-7 text-white"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+         <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'name'"
+                        [keyError]="'db.name'" [(model)]="record.db.name"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'note'"
+                        [keyError]="'db.note'" [(model)]="record.db.note"></cm_input>
+                </div>
+            </div>
+
+
+        </div>
+        <br />
+        <mat-tab-group dynamicHeight>
+            <mat-tab label="{{'NAV.sys_user' | transloco}}">
+                <div class="p-6 bg-card shadow rounded-2xl overflow-hidden" *ngIf="actionEnum!=3">
+                    <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+
+                        <div class="flex-1">
+                            <cm_select_server_side [label]="'system.user_name'"
+                                [link]="'/sys_group_user.ctr/getListUser/'" [(objectChose)]="item_chose"
+                                [callbackChange]="bind_data_item_chose.bind(this)" [(model)]="additem.db.user_id">
+                            </cm_select_server_side>
+                        </div>
+                        <div class="flex-1">
+                            <cm_input [label]="'note'" [actionEnum]="actionEnum" [(model)]="additem.db.note"></cm_input>
+
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap justify-end">
+                        <div class="flex-1">
+                            <button (click)="addDetail()" mat-flat-button [color]="'primary'">
+                        <label transloco="add"></label></button>
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+                 <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+                    <div class="w-full">
+                        <div>
+                            <span class="text-red-500 italic font-semibold"
+                                *ngFor="let item of errorModel | filter : 'key' : 'list_item' ;  index as i;">
+                                (<span *ngFor="let msg of item.value">
+                                    {{msg | transloco}}
+                                </span>)
+                            </span>
+
+                            <nz-table nzBordered nzSize="small" #basicTable1 [nzLoading]="loading" nzShowPagination="true"  [(nzData)]="record.list_item">
+                                <thead>
+                                    <tr>
+                                        <th nzAlign="center" *ngIf="actionEnum!=3" nzWidth="100px"></th>
+                                        <th transloco="no_"></th>
+                                        <th transloco="system.user_name"></th>
+                                        <th transloco="note"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of basicTable1.data; index as i">
+                                        <td nzAlign="center" *ngIf="actionEnum!=3">
+                                            <button color="warn" mat-raised-button transloco="delete"
+                                                class="dark:bg-red-900 ring-white ring-2 dark:hover:bg-red-700 dark:ring-red-600 bg-red-600 text-white shadow-none hover:bg-red-700"
+                                                (click)="deleteDetail(i)"></button>
+                                        </td>
+                                        <td nzAlign="center">{{ i+1 }}</td>
+                                        <td>{{ item.user_name }}</td>
+                                        <td>{{ item.db.note }}</td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </mat-tab>
+            <mat-tab label="{{'role' | transloco}}">
+                <div class="overflow-y-scroll py-6 px-6 h-80 p-6 bg-card shadow rounded-2xl">
+                    <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                        <div>
+                            <span class="text-red-500 italic font-semibold"
+                                *ngFor="let item of errorModel | filter : 'key' : 'list_role' ;  index as i;">
+                                (<span *ngFor="let msg of item.value">
+                                    {{msg | transloco}}
+                                </span>)
+                            </span>
+
+                            <br />
+                            <table class="w-full">
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="flex-1">
+                                            <mat-label>
+                                                {{ 'name' | transloco }}
+                                            </mat-label>
+                                            <input matInput [(ngModel)]="searchRole">
+
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="example-list-section">
+                                            <mat-checkbox class="example-margin" [checked]="allComplete"
+                                                [indeterminate]="someComplete()" (change)="setAll($event.checked)">
+                                                <span transloco="all"></span>
+                                            </mat-checkbox>
+                                        </span>
+                                        <span class="example-list-section">
+                                            <ul style="list-style-type: none;" *ngIf="actionEnum !==3">
+                                                <li
+                                                    *ngFor="let item of (listRoleFilter | filter : 'name' : searchRole) ;  index as i;">
+                                                    <h2 class="text-xl font-semibold mt-2"
+                                                        *ngIf="i==0 || item.controller_name !== listRoleFilter[(i==0?1:i)-1].controller_name">
+                                                        {{ item.controller_name | transloco}}</h2>
+                                                    <label nz-checkbox [(ngModel)]="item.completed"
+                                                        (ngModelChange)="updateAllComplete()"> {{ item.controller_name |
+                                                        transloco}}-{{item.role.name | transloco}}</label>
+                                                </li>
+                                            </ul>
+                                            <ul style="list-style-type: none;" *ngIf="actionEnum ===3">
+                                                <li
+                                                    *ngFor="let item of (record.list_role) ;  index as i;">
+                                                    <h2 class="text-xl font-semibold mt-2">
+                                                        {{ item.db.controller_name | transloco}}</h2>
+                                                    <label nz-checkbox [ngModel]="true" nzDisabled="true"
+                                                        (ngModelChange)="updateAllComplete()"> {{ item.db.controller_name |
+                                                        transloco}}-{{item.db.role_name | transloco}}</label>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </mat-tab>
+        </mat-tab-group>
+        <div class="flex flex-row justify-end space-x-2">
+                        <button *ngIf="actionEnum!=3" (click)="save()" mat-flat-button [color]="'primary'">
+                <label transloco="save"></label>
+            </button>
+            <!-- <button class="hidden sm:inline-flex" mat-stroked-button (click)="close()">
+                <span transloco="close"></span>
+            </button> -->
+        </div>
+    </div>
+</div>

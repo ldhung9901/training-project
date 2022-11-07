@@ -1,0 +1,390 @@
+<div class="flex flex-col flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium" transloco="NAV.system_item"></div>
+
+        <button mat-icon-button (click)="closeCustom()">
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-7 text-white"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+        <mat-tab-group>
+            <mat-tab label="{{'maintenance.maintenance_system_info'|transloco}}">
+                <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+                    <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                        <div class="mr-3">
+                            <div class="flex flex-col items-center">
+                                <div *ngIf="actionEnum==3" class="w-32 h-44 border rounded overflow-hidden">
+                                    <ng-container *ngIf="record.db.pathImg; else noImage">
+                                        <img class="w-full h-full object-cover" [src]="record.db.pathImg"
+                                            onerror="this.src='assets/images/logo/techpro.png';">
+                                    </ng-container>
+                                    <ng-template #noImage>
+                                        <img class="w-full h-full object-cover"
+                                            [src]="'assets/images/logo/techpro.png'">
+                                    </ng-template>>
+                                </div>
+                                <div *ngIf="actionEnum!=3"
+                                    class="relative flex items-center justify-center w-32 h-44  overflow-hidden ring-4 ring-bg-card">
+                                    <!-- Upload / Remove avatar -->
+                                    <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+                                    <div class="absolute inset-0 flex items-center justify-center z-20">
+                                        <div>
+                                            <input id="avatar-file-input" (change)="selectFile($event)"
+                                                class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                                type="file" [multiple]="false" [accept]="'image/jpeg, image/png'"
+                                                #avatarFileInput>
+                                            <label
+                                                class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
+                                                for="avatar-file-input" matRipple>
+                                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                                </mat-icon>
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <button mat-icon-button (click)="removeItemImg()">
+                                                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                                </mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- Image/Letter -->
+                                    <img class="object-cover w-full h-full" *ngIf="record.db.pathImg"
+                                        [src]="record.db.pathImg" onerror="this.src='assets/images/logo/techpro.png';">
+                                    <img class="object-cover w-full h-full" *ngIf="!record.db.pathImg"
+                                        [src]="'assets/images/logo/techpro.png'">
+                                </div>
+                            </div>
+                            <div class="flex flex-col mt-3">
+                                <mat-slide-toggle [color]="'primary'" [checked]="record.db.status_del==1"
+                                    (change)="changeStatus($event)" [disabled]="actionEnum==3">
+                                    <span class="font-semibold">
+                                        {{'system.active'|transloco}}
+                                    </span>
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                                <div class="flex-1">
+                                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum"
+                                        [label]="'system.code_item'" [(model)]="record.db.code_item" [maxlength]="200"
+                                        [keyError]="'db.code_item'">
+                                    </cm_input>
+                                </div>
+                                <div class="flex-2">
+                                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum"
+                                        [label]="'system.item_name'" [(model)]="record.db.name" [maxlength]="200"
+                                        [keyError]="'db.name'"></cm_input>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+
+                                <!-- Loại -->
+                                <div class="flex-1">
+                                    <cm_select [errorModel]="errorModel" [listData]="listType"
+                                        [label]="'system.type_item'" [(model)]="record.db.type" [keyError]="'db.type'"
+                                        [actionEnum]="actionEnum">
+                                    </cm_select>
+                                </div>
+                                <div class="flex-1">
+                                    <!-- Nhóm vật tư -->
+                                    <cm_select [listData]="listSysItemType" [label]="'system.material_group'"
+                                        [(model)]="record.db.id_item_type" [actionEnum]="actionEnum">
+                                    </cm_select>
+                                </div>
+
+                                <div class="flex-1">
+                                    <mat-form-field class="w-full" [class.mat-form-field-disabled]="actionEnum === 3">
+                                        <mat-label>
+                                            {{'system.cost_code' | transloco}}
+                                            <!-- <span class="text-red-500 italic font-semibold"
+                                                *ngFor="let item of errorModel | filterCorrect : 'key' : 'db.id_item_type' ;  index as i;">
+                                                (<span *ngFor="let msg of item.value">
+                                                    {{msg | transloco}}
+                                                </span>)
+                                            </span> -->
+                                        </mat-label>
+                                        <mat-select [(ngModel)]="record.db.id_cost_type" [disabled]="actionEnum === 3">
+                                            <mat-option>
+                                                <ngx-mat-select-search [(ngModel)]="search"
+                                                    placeholderLabel="{{ 'search' | transloco }}"
+                                                    noEntriesFoundLabel="{{'no_data' | transloco }}">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option
+                                                *ngFor="let it of listCostType | filter : 'cost_type_code' : search"
+                                                [value]="it.id">
+                                                {{it.cost_type_code}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                                <div class="flex-1">
+                                    <cm_select [errorModel]="errorModel" [listData]="listSysUnit"
+                                        [label]="'system.unit'" [(model)]="record.db.id_unit" [actionEnum]="actionEnum"
+                                        [keyError]="'db.id_unit'">
+                                    </cm_select>
+                                </div>
+                                <div class="flex-1">
+                                    <cm_input [actionEnum]="3" [label]="'system.stock_inventory'" [type]="'number'"
+                                        [(model)]="record.inventory_quantity">
+                                    </cm_input>
+                                </div>
+                                <div class="flex-2">
+                                    <cm_input [actionEnum]="actionEnum" [label]="'system.unit_price_vnd'"
+                                        [(model)]="record.db.price" [type]="'number'">
+                                    </cm_input>
+                                </div>
+                                <div class="flex-2">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap mt-2">
+
+                        <div class="flex-1">
+                            <div class="space-y-4">
+                                <div
+                                    *ngFor="let item_unit_other of record.list_sys_item_unit_other; let i = index; let first = first; let last = last; trackBy: trackByFn">
+                                    <div class="flex">
+                                        <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                            <mat-label *ngIf="first">{{'system.other_unit'|transloco}}</mat-label>
+                                            <mat-select [(ngModel)]="item_unit_other.db.id_unit"
+                                                [disabled]="actionEnum === 3">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [(ngModel)]="searchItemUnitOther"
+                                                        placeholderLabel="{{ 'search' | transloco }}"
+                                                        noEntriesFoundLabel="{{'no_data' | transloco }}">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option *ngFor="let it of listSysUnit | filter : 'name' : item_unit"
+                                                    [value]="it.id">
+                                                    {{it.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-form-field class="fuse-mat-no-subscript flex-auto  ml-2 sm:ml-4">
+                                            <mat-label *ngIf="first">{{'system.conversion_factor'|transloco}}
+                                            </mat-label>
+                                            <input matInput [type]="'number'"
+                                                [(ngModel)]="item_unit_other.db.conversion_factor"
+                                                (blur)="changeUnitOther(item_unit_other)" min="0"
+                                                [disabled]="actionEnum === 3"
+                                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        </mat-form-field>
+                                        <ng-container>
+                                            <div *ngIf="actionEnum!=3" class="flex items-center w-10 pl-2"
+                                                [ngClass]="{'mt-6': first}">
+                                                <button class="w-8 h-8 min-h-8" mat-icon-button (click)="removeUnit(i)"
+                                                    matTooltip="Remove">
+                                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'">
+                                                    </mat-icon>
+                                                </button>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="actionEnum!=3"
+                                class="group inline-flex items-center mt-2 -ml-4 py-2 px-4 rounded cursor-pointer"
+                                (click)="addUnit()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                                <span
+                                    class="ml-2 font-medium text-secondary group-hover:underline">{{'system.add_other_unit'|transloco}}</span>
+                            </div>
+
+                        </div>
+                        <!-- Kho tối thiểu tối đa -->
+                        <div class="flex-1">
+                            <div class="space-y-4">
+                                <ng-container
+                                    *ngFor="let item_min_max of record.list_item_min_max_stock; let i = index; let first = first; let last = last; trackBy">
+                                    <!--Kho-->
+                                    <div class="flex">
+                                        <mat-form-field class="fuse-mat-no-subscript flex-2 ">
+
+                                            <mat-label *ngIf="first">{{'system.inventory'|transloco}}</mat-label>
+                                            <mat-select [(ngModel)]="item_min_max.db.id_warehouse"
+                                                [disabled]="actionEnum === 3">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [(ngModel)]="searchWarehouse"
+                                                        placeholderLabel="{{ 'search' | transloco }}"
+                                                        noEntriesFoundLabel="{{'no_data' | transloco }}">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let it of listSysWarehouse | filter : 'name' : item_unit"
+                                                    [value]="it.id">
+                                                    {{it.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <!-- Tồn kho tối thiểu-->
+                                        <mat-form-field class="fuse-mat-no-subscript flex-1  ml-2 sm:ml-4">
+                                            <mat-label *ngIf="first">{{'system.inventory_min_stock'|transloco}}
+                                            </mat-label>
+                                            <input matInput type="number" [(ngModel)]="item_min_max.db.min_stock"
+                                                min="0" (blur)="changeMinMaxStock(item_min_max)"
+                                                [disabled]="actionEnum === 3"
+                                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        </mat-form-field>
+                                        <!-- Tồn kho tối đa-->
+                                        <mat-form-field class="fuse-mat-no-subscript flex-1  ml-2 sm:ml-4">
+                                            <mat-label *ngIf="first">{{'system.inventory_max_stock'|transloco}}
+                                            </mat-label>
+                                            <input matInput type="number" [(ngModel)]="item_min_max.db.max_stock"
+                                                min="0" (blur)="changeMinMaxStock(item_min_max)"
+                                                [disabled]="actionEnum === 3"
+                                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        </mat-form-field>
+                                        <!-- Icon xóa-->
+                                        <ng-container>
+                                            <div *ngIf="actionEnum!=3" class="flex items-center w-10 pl-2"
+                                                [ngClass]="{'mt-6': first}">
+                                                <button class="w-8 h-8 min-h-8" mat-icon-button
+                                                    (click)="removeMinMaxStock(i)" matTooltip="Remove">
+                                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'">
+                                                    </mat-icon>
+                                                </button>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div *ngIf="actionEnum!=3"
+                                class="group inline-flex items-center mt-2 -ml-4 py-2 px-4 rounded cursor-pointer"
+                                (click)="addMinMaxStock()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                                <span
+                                    class="ml-2 font-medium text-secondary group-hover:underline">{{'system.add_inventory_max_stock'|transloco}}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap mt-2">
+                        <div class="flex-1">
+                            <cm_input [actionEnum]="actionEnum" [label]="'system.description'"
+                                [(model)]="record.db.description" [maxlength]="500">
+                            </cm_input>
+                        </div>
+                        <div class="flex-1">
+                            <cm_input [actionEnum]="actionEnum" [label]="'system.note'"
+                                [(model)]="record.db.note" [maxlength]="500"></cm_input>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- <mat-tab label="{{ 'B.O.M' }}">
+
+            </mat-tab> -->
+            <mat-tab label="{{'NAV.quality'|transloco}}">
+                <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+                    <div align="end" >
+                        <button *ngIf="this.actionEnum != 3" (click)="openDialogAdd()" mat-flat-button [color]="'primary'"><label
+                                transloco="quality.add_quality_config"></label></button>
+                    </div>
+                    <br />
+                    <div class="w-full">
+                        <ng-container *ngIf="errorModel">
+                            <span class="text-red-500 italic font-semibold"
+                                *ngFor="let item of errorModel | filter : 'key' : 'list_item_quality' ; index as i;">
+                                (<span *ngFor="let msg of item.value"> {{msg | transloco}} </span>) </span>
+                        </ng-container>
+                        <nz-table nzBordered nzSize="small" #basicTable2 [nzLoading]="loading" nzShowPagination="true"
+                            [nzData]="this.record.list_item_quality">
+                            <thead>
+                                <tr>
+                                    <th style="width: 75px" *ngIf="actionEnum!=3"></th>
+                                    <th transloco="no_"></th>
+                                    <th transloco="system.config_code"></th>
+                                    <th transloco="system.config_name"></th>
+                                    <th transloco="system.apply_day" [nzWidth]="'150'"></th>
+                                    <th transloco="system.use"></th>
+                                    <th [nzWidth]="'150'" transloco="note"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container>
+                                    <ng-container *ngFor="let item of basicTable2.data;  index as i;">
+                                        <tr>
+                                            <td align="center" class="px-2">
+                                                <button class="justify-self-center" mat-icon-button
+                                                    [matMenuTriggerFor]="menu">
+                                                    <mat-icon class="icon-size-5"
+                                                        [svgIcon]="'heroicons_solid:dots-vertical'">
+                                                    </mat-icon>
+                                                </button>
+                                                <mat-menu #menu="matMenu">
+                                                    <button mat-menu-item (click)="openDialogDetail(item, i)">
+                                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'">
+                                                        </mat-icon>
+                                                        <span transloco="view"></span>
+                                                    </button>
+                                                    <button mat-menu-item (click)="openDialogEdit(item, i)"
+                                                        *ngIf="actionEnum != 3">
+                                                        <mat-icon class="icon-size-5"
+                                                            [svgIcon]="'heroicons_solid:pencil-alt'">
+                                                        </mat-icon>
+                                                        <span transloco="edit"></span>
+                                                    </button>
+                                                    <button mat-menu-item (click)="delete(item.db.id)"
+                                                        *ngIf="actionEnum != 3">
+                                                        <mat-icon class="icon-size-5"
+                                                            [svgIcon]="'heroicons_outline:trash'">
+                                                        </mat-icon>
+                                                        <span transloco="delete"></span>
+                                                    </button>
+                                                </mat-menu>
+                                            </td>
+                                            <td>{{ i+1 }}</td>
+                                            <td>{{ item.db.config_code }}</td>
+                                            <td>
+                                                {{
+                                                item.db.config_name
+                                                }}
+                                            </td>
+                                            <td>
+                                                {{ item.db.aplly_date | date: 'dd/MM/yyyy HH:mm'}}
+                                            </td>
+                                            <td>
+                                                <label nz-checkbox nzDisabled [(ngModel)]="item.db.status_use"
+                                                    [nzDisabled]="true"></label>
+
+                                            <td [nzWidth]="150">
+
+                                                {{ item.db.note }}
+                                            </td>
+                                        </tr>
+
+
+                                    </ng-container>
+                                </ng-container>
+
+                            </tbody>
+
+                        </nz-table>
+
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+
+        <br />
+        <div class="flex flex-row justify-end space-x-2">
+
+            <button *ngIf="actionEnum!=3" (click)="save()" mat-flat-button [color]="'primary'">
+                <label transloco="save"></label>
+            </button>
+        </div>
+    </div>
+</div>

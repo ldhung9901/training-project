@@ -1,0 +1,112 @@
+<mat-form-field *ngIf="type == 'text'" class="w-full fuse-mat-dense" [class.mat-form-field-disabled]="actionEnum === 3">
+    <mat-label *ngIf="label"> {{ label | transloco }} {{ labelAddString }}<span class="text-red-500 italic font-semibold" *ngFor="let item of errorModel | filterCorrect: 'key':keyError; index as i">
+        (<span *ngFor="let msg of item.value"> {{ msg | transloco }} </span>)
+    </span></mat-label>
+    <input [readonly]="actionEnum == 3" matInput maxlength="{{ maxlength }}" [(ngModel)]="model"
+           (keyup.enter)="enterAction()"
+        (ngModelChange)="modelChange.emit(model); setChose()" />
+    <mat-error *ngIf="errorModel?.length!=0">
+        <ng-container
+          *ngFor="let item of errorModel | filterCorrect: 'key':keyError; index as i">
+            <ng-container *ngFor="let msg of item.value"> {{ msg | transloco }} </ng-container>
+        </ng-container>
+    </mat-error>
+    <mat-hint class="text-right">{{ model?.length }} / {{ maxlength }}</mat-hint>
+</mat-form-field>
+
+<mat-form-field *ngIf="type === 'number'" [class.mat-form-field-disabled]="actionEnum === 3" class="w-full fuse-mat-dense">
+    <mat-label>
+        {{ label | transloco }} {{ labelAddString }}
+        <span class="text-red-500 italic font-semibold" *ngFor="let item of errorModel | filterCorrect: 'key':keyError; index as i">
+            (<span *ngFor="let msg of item.value"> {{ msg | transloco }} </span>)
+        </span>
+    </mat-label>
+    <input min="{{ min }}" [readonly]="actionEnum === 3" maxlength="30" [options]="myOptions" autonumeric matInput [(ngModel)]="model" type="number"
+            (keyup.enter)="enterAction()"
+        (ngModelChange)="modelChange.emit(model); setChose($event)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+    <span matSuffix> &nbsp;{{ suffixstring }}</span>
+</mat-form-field>
+
+
+<mat-form-field *ngIf="type === 'readonly'" [class.mat-form-field-disabled]="actionEnum === 3" class="w-full">
+    <mat-label> {{ label | transloco }} {{ labelAddString }} </mat-label>
+    <input readonly matInput [(ngModel)]="model" (ngModelChange)="modelChange.emit(model)" />
+</mat-form-field>
+
+<mat-form-field *ngIf="type === 'time'" [class.mat-form-field-disabled]="actionEnum === 3" class="w-full">
+    <mat-label>
+        {{ label | transloco }} {{ labelAddString }}
+        <span class="text-red-500 italic font-semibold" *ngFor="let item of errorModel | filterCorrect: 'key':keyError; index as i">
+            (<span *ngFor="let msg of item.value"> {{ msg | transloco }} </span>)
+        </span>
+    </mat-label>
+    <input [readonly]="actionEnum === 3" [textMask]="{ mask: timemask }" type="time" matInput [(ngModel)]="model"
+            (keyup.enter)="enterAction()"
+        (ngModelChange)="modelChange.emit(model); setChose()" />
+</mat-form-field>
+
+
+<mat-form-field *ngIf="type === 'datepicker'" [class.mat-form-field-disabled]="actionEnum === 3" class="w-full">
+    <mat-label>
+        {{ label | transloco }} {{ labelAddString }}
+        <span class="text-red-500 italic font-semibold" *ngFor="let item of errorModel | filterCorrect: 'key':keyError; index as i">
+            (<span *ngFor="let msg of item.value"> {{ msg | transloco }} </span>)
+        </span>
+    </mat-label>
+    <input [readonly]="actionEnum === 3" matInput [matDatepicker]="startDatePicker" [(ngModel)]="model"
+            (keyup.enter)="enterAction()"
+        (ngModelChange)="modelChange.emit(model); setChose()" />
+    <mat-datepicker-toggle matSuffix [for]="startDatePicker" [hidden]="actionEnum === 3"></mat-datepicker-toggle>
+    <mat-datepicker #startDatePicker [hidden]="actionEnum === 3"></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field *ngIf="type === 'password'"  [class.mat-form-field-disabled]="actionEnum === 3"
+    class="w-full">
+    <mat-label>
+        {{ label | transloco }} {{ labelAddString }}
+
+        <span class="text-red-500 italic font-semibold" *ngFor="let item of errorModel | filterCorrect: 'key':keyError; index as i">
+            (<span *ngFor="let msg of item.value"> {{ msg | transloco }} </span>)
+        </span>
+    </mat-label>
+    <input [readonly]="actionEnum === 3" matInput [type]="hide ? 'password' : 'text'" maxlength="{{ maxlength }}"
+            (keyup.enter)="enterAction()"
+        [(ngModel)]="model" (ngModelChange)="modelChange.emit(model); setChose()" />
+    <mat-icon matSuffix (click)="hide = !hide">{{
+        hide ? "visibility_off" : "visibility"
+        }}</mat-icon>
+    <mat-hint class="text-right">{{ model?.length }} / {{ maxlength }}</mat-hint>
+</mat-form-field>
+
+
+<mat-form-field *ngIf="type === 'datetimepicker'" [class.mat-form-field-disabled]="actionEnum === 3"
+    class="w-full">
+    <mat-label>
+        {{ label | transloco }} {{ labelAddString }}
+        <span class="text-red-500 italic font-semibold" *ngFor="let item of errorModel | filterCorrect: 'key':keyError; index as i">
+            (<span *ngFor="let msg of item.value"> {{ msg | transloco }} </span>)
+        </span>
+    </mat-label>
+    <input matInput [ngxMatDatetimePicker]="timePicker" [(ngModel)]="model" (ngModelChange)="modelChange.emit(model);setChose()" />
+    <mat-datepicker-toggle matSuffix [for]="timePicker"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #timePicker [showSeconds]="showSeconds" [stepHour]="stepHour" [stepMinute]="stepMinute"
+        [stepSecond]="stepSecond" [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian">
+    </ngx-mat-datetime-picker>
+</mat-form-field>
+
+<mat-form-field *ngIf="type === 'daterangepicker'" [class.mat-form-field-disabled]="actionEnum === 3"
+    class="w-full">
+    <mat-label *ngIf="label"> {{ label | transloco }} {{ labelAddString }}
+        <span class="text-red-500 italic font-semibold" *ngFor="let item of errorModel | filterCorrect: 'key':keyError; index as i">
+            (<span *ngFor="let msg of item.value"> {{ msg | transloco }} </span>)
+        </span>
+    </mat-label>
+    <mat-date-range-input  [rangePicker]="picker" [min]="minDate" [max]="maxDate" [disabled]="actionEnum === 3">
+        <input  [(ngModel)]="model.start" matStartDate  placeholder="Start date"
+            (dateChange)="modelChange.emit(model)">
+        <input [(ngModel)]="model.end" matEndDate placeholder="End date" (dateChange)="modelChange.emit(model);setChose()" [disabled]="actionEnum === 3">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="actionEnum === 3"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+
+</mat-form-field>

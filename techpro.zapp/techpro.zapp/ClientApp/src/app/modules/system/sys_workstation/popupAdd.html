@@ -1,0 +1,115 @@
+<div class="flex flex-col flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium" transloco="NAV.sys_workstation"></div>
+
+        <button mat-icon-button (click)="closeCustom()">
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-7 text-white"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+        <div class="grid grid-cols-1 lg:grid-cols-4 grid-flow-row gap-6 w-full">
+            <div class="mr-2">
+                <div class="relative flex items-center justify-center w-42 h-53  overflow-hidden ring-4 ring-bg-card">
+                    <div *ngIf="actionEnum==3" class="w-16 h-50 border rounded overflow-hidden">
+                        <ng-container *ngIf="record.db.pathimg; else noImage">
+                            <img class="w-full h-full object-cover" [src]="record.db.pathimg"
+                                onerror="this.src='assets/images/logo/techpro.png';">
+                        </ng-container>
+                        <ng-template #noImage>
+                            <img class="w-full h-full object-cover" [src]="'assets/images/logo/techpro.png'">
+                        </ng-template>>
+                    </div>
+                    <div *ngIf="actionEnum!=3"
+                        class="relative flex items-center justify-center w-65 h-40  overflow-hidden ring-4 ring-bg-card">
+                        <!-- Upload / Remove avatar -->
+                        <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+                        <div class="absolute inset-0 flex items-center justify-center z-20">
+                            <div>
+                                <input id="avatar-file-input" (change)="selectFile($event)"
+                                    class="absolute h-0 w-0 opacity-0 invisible pointer-events-none" type="file"
+                                    [multiple]="false" [accept]="'image/jpeg, image/png'" #avatarFileInput>
+                                <label
+                                    class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
+                                    for="avatar-file-input" matRipple>
+                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                                    </mat-icon>
+                                </label>
+                            </div>
+                            <div>
+                                <button mat-icon-button (click)="removeItemImg()">
+                                    <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                                    </mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Image/Letter -->
+                        <img class="object-cover w-full h-full" *ngIf="record.db.pathimg" [src]="record.db.pathimg"
+                            onerror="this.src='assets/images/logo/techpro.png';">
+                        <img class="object-cover w-full h-full" *ngIf="!record.db.pathimg"
+                            [src]="'assets/images/logo/techpro.png'">
+                    </div>
+                </div>
+                <div class="flex flex-col mt-3 ml-20">
+                    <mat-slide-toggle [color]="'primary'" [checked]="record.db.status_del==1"
+                        (change)="changeStatus($event)" [disabled]="actionEnum==3">
+                        <span class="font-semibold">
+                            {{'system.active'|transloco}}
+                        </span>
+                    </mat-slide-toggle>
+                </div>
+            </div>
+
+
+            <div class="p-6 bg-card shadow rounded-2xl overflow-hidden col-span-3">
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.name'"
+                            [keyError]="'db.name'" [(model)]="record.db.name"></cm_input>
+                    </div>
+                    <div class="flex-1">
+                        <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.ip_address'"
+                            [keyError]="'db.ip_address'" [(model)]="record.db.ip_address"></cm_input>
+                    </div>
+                    <div class="flex-1">
+                        <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum"
+                            [label]="'system.manage_workstation'" [keyError]="'db.note'"
+                            [(model)]="record.db.manage_workstation">
+                        </cm_input>
+                    </div>
+
+                </div>
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <cm_select [label]="'NAV.sys_factory'" [listData]="listfactory"
+                            [callbackChange]="bind_data_factory.bind(this)" [(model)]="record.db.id_sys_factory">
+                        </cm_select>
+                    </div>
+                    <div class="flex-1">
+                        <cm_select [label]="'NAV.sys_factory_line'" [listData]="listfactoryline"
+                            [(model)]="record.db.id_sys_factory_line"></cm_select>
+                    </div>
+                    <div class="flex-1">
+                        <cm_select [label]="'system.phase'" [listData]="listphase" [(model)]="record.db.id_sys_phase"
+                            [errorModel]="errorModel" [actionEnum]="actionEnum" [keyError]="'db.id_sys_phase'">
+                        </cm_select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <div class="flex flex-row justify-end space-x-2">
+            <button
+                class="dark:bg-teal-900 ring-white ring-2 dark:hover:bg-teal-700 dark:ring-teal-600 bg-teal-400 text-white shadow-none hover:bg-teal-600"
+                *ngIf="actionEnum!=3" [disabled]="loading" mat-raised-button (click)="save()" transloco="save"></button>
+            <!-- <button class="hidden sm:inline-flex" mat-stroked-button (click)="close()">
+                <span transloco="close"></span>
+            </button> -->
+        </div>
+    </div>
+</div>

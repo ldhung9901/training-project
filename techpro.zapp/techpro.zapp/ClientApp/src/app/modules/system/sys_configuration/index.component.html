@@ -1,0 +1,57 @@
+<div class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-100 lg:max-w-100 bg-card dark:bg-transparent">
+    <div class="flex items-center justify-between m-8 mr-6 sm:my-10">
+        <!-- Title -->
+        <div class="text-3xl font-extrabold tracking-tight leading-none">{{_translocoService.translate('NAV.sys_configuration')}}</div>
+        <!-- Close button -->
+        <div class="lg:hidden">
+            <button
+                mat-icon-button
+                (click)="drawer.close()">
+                <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </button>
+        </div>
+    </div>
+    <!-- Panel links -->
+    <div class="flex flex-col divide-y border-t border-b">
+        <ng-container *ngFor="let panel of panels; trackBy: trackByFn">
+            <div
+                class="flex px-8 py-5 cursor-pointer"
+                [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedPanel || selectedPanel !== panel.id,
+                            'bg-primary-50 dark:bg-hover': selectedPanel && selectedPanel === panel.id}"
+                (click)="goToPanel(panel.id)">
+                <mat-icon
+                    [ngClass]="{'text-hint': !selectedPanel || selectedPanel !== panel.id,
+                                'text-primary dark:text-primary-500': selectedPanel && selectedPanel === panel.id}"
+                    [svgIcon]="panel.icon"></mat-icon>
+                <div class="ml-3">
+                    <div
+                        class="font-medium leading-6"
+                        [ngClass]="{'text-primary dark:text-primary-500': selectedPanel && selectedPanel === panel.id}">
+                        {{panel.title}}
+                    </div>
+                    <div class="mt-0.5 text-secondary">
+                        {{panel.description}}
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
+<div class="flex-auto px-6 pt-9 pb-12 md:p-8 md:pb-12 lg:p-12">
+    <div class="flex items-center">
+        <div class="ml-2 lg:ml-0 text-3xl font-bold tracking-tight leading-none">
+            {{getPanelInfo(selectedPanel).title}}
+        </div>
+    </div>
+    <ng-container [ngSwitch]="selectedPanel">
+        <ng-container *ngSwitchCase="'account'">
+            <sys_company_info></sys_company_info>
+        </ng-container>
+        <ng-container *ngSwitchCase="'security'">
+            <sys_format_license_config></sys_format_license_config>
+        </ng-container>
+        <ng-container *ngSwitchCase="'plan-billing'">
+            <sys_working_time_config></sys_working_time_config>
+        </ng-container>
+    </ng-container>
+</div>

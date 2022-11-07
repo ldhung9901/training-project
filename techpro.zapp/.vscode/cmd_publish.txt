@@ -1,0 +1,32 @@
+dotnet publish --configuration Release --output ../../_Release
+
+dotnet ef migrations add Init --startup-project .\techpro.zapp\ --context techproDefautContext --project .\techpro.DataBase\
+dotnet ef database update --project .\techpro.zapp\ --context techproDefautContext
+dotnet run --project .\techpro.zapp\techpro.zapp.csproj
+
+# docker run
+docker run -dp 5001:80 -w /app -v G:\dockertest:/app/uploadFile 0868436291/mes_factory
+# docker build
+docker build -t 0868436291/mes_factory .
+# docker push
+docker push 0868436291/mes_factory
+
+
+#kubernetes
+kubectl apply -f mes-factory-depl.yaml
+kubectl delete deployment mes-factory-depl
+kubectl get deployments
+kubectl get pods
+kubectl rollout restart deployment mes-factory-depl
+
+
+
+kubectl apply -f mes-factory-nodeport-service.yaml
+kubectl delete service mes-factory-nodeport-service
+kubectl get services
+
+
+
+kubectl apply -f mes-factory-nodeport-service.yaml
+
+Q8B7k6Ur9BbFqwvTU5KH

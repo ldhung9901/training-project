@@ -1,0 +1,207 @@
+<div class="flex flex-col flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium" transloco="NAV.sys_approval"></div>
+        <button mat-icon-button (click)="close()">
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-7 text-white"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto dark:bg-gray-900">
+        <mat-card class="rounded-2xl py-6 px-6 shadow-none">
+            <mat-tab-group dynamicHeight>
+                <mat-tab label="{{'common.step_process_approval'| transloco }}">
+                    <div class="w-full">
+                        <div class="w-full">
+                            <nz-table nzSize="small" #basicTable1 [nzLoading]="loading" nzShowPagination="true"
+                                [(nzData)]="record.list_step">
+                                <thead>
+                                    <tr>
+                                        <th transloco="no_"></th>
+                                        <th transloco="common.step_num"></th>
+                                        <th transloco="common.step_name"></th>
+                                        <th transloco="common.user_name"></th>
+                                        <th transloco="common.duration_hours"></th>
+                                        <th transloco="note"></th>
+                                        <!-- <th class="text-center" transloco="approval_status"></th> -->
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let item of basicTable1.data;  index as i;">
+                                        <td>{{ i+1 }}</td>
+                                        <td>{{ item.db.step_num }}</td>
+                                        <td>{{ item.db.name }}</td>
+                                        <td>{{ item.user_name }}</td>
+                                        <td align="right">{{ item.db.duration_hours | number }}</td>
+                                        <td>{{ item.db.note }}</td>
+                                        <!-- <td class="space-y-2">
+                                        <div style="color:blue" *ngIf="item.db.status==1" class="flex flex-col">
+                                            <div class="flex flex-row">
+                                                <td style="padding:0px">
+                                                    <mat-icon>loop</mat-icon>
+                                                </td>
+                                                <td>
+                                                    <span transloco="common.waiting_approval"></span>
+                                                </td>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="item.db.status==2" class="flex flex-col">
+                                            <div style="background-color: inherit; border:none" class="text-md flex flex-row">
+                                                <span class="w-max py-0.5 px-3 rounded-full text-sm font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500" transloco="common.approved"></span>
+
+                                            </div>
+                                        </div>
+                                        <div style="color:orange" *ngIf="item.db.status==3" class="flex flex-col">
+                                            <div style="background-color: inherit;" align="center" class="text-md flex flex-row">
+                                                <div class="text-md">
+                                                    <span class="w-max py-0.5 px-3 rounded-full text-sm font-semibold text-purple-800 bg-purple-100 dark:text-purple-50 dark:bg-purple-500" transloco="common.return"></span>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td> -->
+                                    </tr>
+                                    <!-- <tr *ngIf="record?.db?.status_finish == 4">
+                                    <div class="flex flex-col space-y-2">
+                                        <div style="background-color: inherit;" style="border: none;" class="flex flex-row">
+                                            <div class="text-md">
+                                                <span class="w-max py-0.5 px-3 rounded-full text-sm font-semibold text-red-800 bg-red-100 dark:text-red-50 dark:bg-red-500" transloco="common.cancel"></span>
+                                            </div>
+                                        </div>
+                                        <div style="background-color: inherit;" style="border: none;" class="flex flex-row">
+                                            <div colspan="2">
+                                                <span class="w-max py-0.5 px-3 rounded-full text-sm font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500" transloco="common.reason"></span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                                <tr *ngIf="record?.db?.status_finish == 6">
+                                    <div>
+                                        <div style="background-color: inherit;" align="center">
+                                            <td class="text-md">
+                                                <span class="w-max py-0.5 px-3 rounded-full text-sm font-semibold text-gray-800 bg-gray-100 dark:text-gray-50 dark:bg-gray-500" transloco="common.close"></span>
+                                            </td>
+                                        </div>
+                                        <div style="background-color: inherit;" align="center">
+                                            <td colspan="2">
+                                                <span class="w-max py-0.5 px-3 rounded-full text-sm font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500" transloco="common.reason"></span>
+                                                <span class="font-bold leading-tight">{{record?.db.last_note}}</span>
+                                            </td>
+                                        </div>
+                                    </div>
+                                </tr> -->
+                                </tbody>
+                            </nz-table>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="{{'common.history_process_approval' |transloco}}">
+                    <div class="flex-1 flex md:flex-row lg:flex-row">
+                        <div class="w-full">
+                            <div class="sm:col-span-6 p-6 bg-card shadow rounded-2xl pt-2 mb-5">
+                                <div>
+                                    <ol>
+                                        <!-- Activities -->
+                                        <ng-container
+                                            *ngFor="let item of record.list_item; let i = index; let first = first; let last = last">
+
+
+                                            <!-- Activity -->
+                                            <li class="relative flex py-7 sm:min-w-192">
+                                                <!-- Line -->
+                                                <ng-container *ngIf="!last">
+                                                    <div
+                                                        class="absolute top-7 left-5 w-0.5 h-full -ml-px bg-gray-300 dark:bg-gray-900">
+                                                    </div>
+                                                </ng-container>
+
+                                                <div class="relative flex flex-auto">
+                                                    <!-- Icon -->
+
+                                                    <div
+                                                        class="flex flex-shrink-0 items-center justify-center w-10 h-10 mr-4 rounded-full bg-gray-400">
+                                                        <mat-icon class="icon-size-5 text-white"
+                                                            [svgIcon]="icon[item.db.status_action - 1]">
+                                                        </mat-icon>
+                                                    </div>
+                                                    <!-- icon[item.db.status_action - 1] -->
+                                                    <!-- Content -->
+                                                    <div class="flex flex-col flex-auto items-start">
+                                                        <!-- Description -->
+                                                        <ng-container *ngIf="item.db.status_action === 1">
+                                                            <div><strong>{{ item.from_user_name }}</strong> bắt đầu quy
+                                                                trình duyệt đến
+                                                                <strong>{{ item.to_user_name }}</strong>
+                                                            </div>
+                                                        </ng-container>
+
+                                                        <ng-container *ngIf="item.db.status_action === 2">
+                                                            <div><strong>{{ item.from_user_name }}</strong> duyệt chứng
+                                                                từ</div>
+                                                        </ng-container>
+
+                                                        <ng-container *ngIf="item.db.status_action === 3">
+                                                            <div><strong>{{ item.from_user_name }}</strong> trả về
+                                                                <strong>{{
+                                                                    item.to_user_name }}</strong>
+                                                            </div>
+                                                        </ng-container>
+
+                                                        <ng-container *ngIf="item.db.status_action === 4">
+                                                            <div><strong>{{ item.from_user_name }}</strong> huỷ chứng từ
+                                                            </div>
+                                                        </ng-container>
+
+                                                        <ng-container *ngIf="item.db.status_action === 5">
+                                                            <div><strong>{{ item.from_user_name }}</strong> mở chứng từ
+                                                            </div>
+                                                        </ng-container>
+
+                                                        <ng-container *ngIf="item.db.status_action === 6">
+                                                            <div><strong>{{ item.from_user_name }}</strong> đóng chứng
+                                                                từ</div>
+                                                        </ng-container>
+
+                                                        <div
+                                                            class="flex flex-col sm:flex-row sm:items-center mt-2 sm:mt-1 sm:space-x-2 text-md leading-5">
+                                                            <!-- Date -->
+                                                            <div class="text-secondary">
+                                                                {{item.db.date_action | date: 'dd/MM/yyyy HH:mm'}}
+                                                            </div>
+                                                            <div class="hidden sm:block">&bull;</div>
+                                                            <div class="cursor-pointer text-primary" target="_blank">
+                                                                {{ item.db.step_num }}. {{item.db.step_name}}
+                                                            </div>
+                                                            <!-- Linked content -->
+                                                        </div>
+                                                        <!-- Extra content -->
+
+                                                        <ng-container
+                                                            *ngIf="item.db.status_action === 3 || item.db.status_action === 4 || item.db.status_action === 5 || item.db.status_action === 6">
+                                                            <div
+                                                                class="mt-4 py-4 px-5 rounded-lg bg-gray-200 dark:bg-gray-800">
+                                                                <strong>Lý
+                                                                    do:</strong> {{ item.db.note }}
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ng-container>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+
+
+    </div>
+</div>

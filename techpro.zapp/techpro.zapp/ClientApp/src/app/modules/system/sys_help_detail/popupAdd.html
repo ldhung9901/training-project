@@ -1,0 +1,48 @@
+<div class="overflow-y-auto h-screen w-screen -m-6">
+
+    <!-- Header -->
+    <div
+        class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 text-on-primar bg-primary-600 text-white">
+        <div class=" flex-1 text-lg font-medium" transloco="NAV.sys_help_detail"></div>
+        <div class="flex-1 flex justify-end space-x-2">
+                        <button *ngIf="actionEnum!=3" (click)="save()" mat-flat-button [color]="'primary'">
+                <label transloco="save"></label>
+            </button>
+            <button class=" bg-gray-100 text-default shadow-none hover:bg-gray-300" [disabled]="loading"
+                mat-raised-button (click)="close()" transloco="close"></button>
+        </div>
+
+    </div>
+
+
+
+    <!-- Card form -->
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto">
+         <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.title'"
+                        [keyError]="'db.title'" [(model)]="record.db.title"></cm_input>
+                </div>
+
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1" *ngIf="actionEnum !=3">
+                    <h1 transloco="system.content"></h1>
+                    <span class="text-red-500 italic font-semibold" *ngFor="let item of errorModel | filter : 'Key' : 'db.note' ;  index as i;">
+                        (<span *ngFor="let msg of item.value">
+                            {{msg | translate}}
+                        </span>)
+                    </span>
+                    <editor [init]="timyconfig" [(ngModel)]="record.db.note"></editor>
+
+                </div>
+                <div class="flex-1" *ngIf="actionEnum ==3">
+                    <h1 transloco="system.content"></h1>
+                    <span [innerHtml]="record.db.note | safeHtml"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

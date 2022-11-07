@@ -1,0 +1,133 @@
+<div class="flex flex-col flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium" transloco="NAV.sys_vendor_item"></div>
+
+        <button mat-icon-button (click)="closeCustom()">
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-7 text-white"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+         <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+
+            <div class="w-full" *ngIf="actionEnum==5">
+
+                <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzData]="listData" [nzFrontPagination]="false" [nzLoading]="pageLoading"
+                    [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+                    (nzQueryParams)="onQueryParamsChange($event)">
+                    <thead>
+                        <tr>
+                            <th transloco="system.no_" style="width:50px; text-align:center"></th>
+                            <th transloco="system.supplier"></th>
+                            <th transloco="system.sys_item"></th>
+                            <th transloco="NAV.sys_item_specification"></th>
+                            <th transloco="NAV.sys_unit"></th>
+                            <th transloco="system.price"></th>
+                            <th transloco="system.min_stock_order"></th>
+                            <th transloco="system.delivery_time"></th>
+                            <th transloco="system.update_by"></th>
+                            <th transloco="system.update_date"></th>
+                            <th transloco="system.create_date"></th>
+                            <th transloco="system.action"></th>
+                            <th transloco="system.note"></th>
+
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr *ngFor="let item of listData;  index as i;">
+                            <td>{{i+1 }}</td>
+                            <td>{{ item.supplier_name }}</td>
+                            <td>{{ item.sys_item_name }}</td>
+                            <td>{{ item.sys_item_specification_name }}</td>
+                            <td>{{ item.sys_unit_name }}</td>
+                            <td>{{item.db.price_item | number}}</td>
+                            <td align="right">{{ item.db.min_stock_order | number }}</td>
+                            <td align="right">{{item.db.delivery_time | number}}</td>
+                            <td>{{ item.updateby_name }}</td>
+                            <td>{{ item.db.update_date | date: 'dd/MM/yyyy HH:mm' }}</td>
+                            <td>{{ item.db.create_date | date: 'dd/MM/yyyy HH:mm' }}</td>
+                            <td>{{ item.db.action | transloco }}</td>
+                            <td>{{ item.db.note }}</td>
+
+                        </tr>
+                    </tbody>
+
+                </nz-table>
+
+
+            </div>
+            <div *ngIf="actionEnum==1||actionEnum==2||actionEnum==3">
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+
+                    <div class="flex-1">
+                        <cm_select [errorModel]="errorModel"  [keyError]="'db.id_supplier'" [label]="'system.supplier'" [listData]="listSupplier" [(model)]="record.db.id_supplier">
+                    </cm_select>
+                    </div>
+
+                    <div class="flex-1">
+                        <cm_select_server_side *ngIf="actionEnum==1" [errorModel]="errorModel" [label]="'system.sys_item'"
+                            [link]="'/sys_item.ctr/getListUse/'" [keyError]="'db.id_item'" [(objectChose)]="item_chose"
+                            [callbackChange]="bind_data_itemchose.bind(this)" [(model)]="record.db.id_item">
+                        </cm_select_server_side>
+
+                        <cm_input [label]="'NAV.sys_item'" *ngIf="actionEnum==3 || actionEnum==2" [errorModel]="errorModel"  [keyError]="'db.id_item'"
+                            [actionEnum]="actionEnum" [(model)]="record.sys_item_name"></cm_input>
+                    </div>
+                    <div class="flex-1">
+                        <cm_select_server_side [label]="'NAV.sys_item_specification'" *ngIf="actionEnum==1"
+                            [link]="'/sys_item_specification.ctr/getListUse/'"
+                            [(objectChose)]="item_chose_specification" [listData]="listData_specification"
+                            [dataFilter]="dataFilter_specification"
+                            [callbackChange]="bind_data_item_specification_chose.bind(this)"
+                            [(model)]="record.db.id_specification"></cm_select_server_side>
+
+                        <cm_input [label]="'NAV.sys_item_specification'" *ngIf="actionEnum==3 || actionEnum==2"
+                            [actionEnum]="actionEnum" [(model)]="record.sys_item_specification_name"></cm_input>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.min_stock_order'"
+                            [labelAddString]="record.sys_item_unit_name" [type]="'number'"
+                            [keyError]="'db.min_stock_order'" [(model)]="record.db.min_stock_order"></cm_input>
+
+                    </div>
+                    <div class="flex-1">
+                        <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.delivery_time'"
+                            [labelAddString]="record.sys_item_unit_name" [type]="'number'"
+                            [keyError]="'db.delivery_time'" [(model)]="record.db.delivery_time"></cm_input>
+
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.price'"
+                            [type]="'number'" [keyError]="'db.price_item'" [(model)]="record.db.price_item"></cm_input>
+                    </div>
+                    <div class="flex-1">
+                        <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'MPQ'"
+                            [keyError]="'db.MPQ'" [(model)]="record.db.MPQ"></cm_input>
+                    </div>
+
+                </div>
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.note'"
+                        [keyError]="'db.note'" [(model)]="record.db.note"></cm_input>
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <div class="flex flex-row justify-end space-x-2">
+            <button class="dark:bg-teal-900 ring-white ring-2 dark:hover:bg-teal-700 dark:ring-teal-600 bg-teal-400 text-white shadow-none hover:bg-teal-600" *ngIf="actionEnum!=3&&actionEnum!=5"
+                [disabled]="loading" mat-raised-button (click)="save()" transloco="save"></button>
+            <!-- <button class="hidden sm:inline-flex" mat-stroked-button (click)="close()">
+                <span transloco="close"></span>
+            </button> -->
+        </div>
+    </div>
+</div>

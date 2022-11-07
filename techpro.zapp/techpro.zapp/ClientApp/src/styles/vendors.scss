@@ -1,0 +1,31 @@
+/* ----------------------------------------------------------------------------------------------------- */
+/*  @ Import third party library styles here.
+/* ----------------------------------------------------------------------------------------------------- */
+
+/* FullCalendar */
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+@import '~@fullcalendar/list/main.css';
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+
+.ant-btn {
+    border-radius: 16px;
+}
+.ant-modal-content, .ant-modal-header {
+    border-radius: 16px;
+}
+.ant-input-disabled, .ant-input[disabled] {
+    color: red;
+}
+.ant-table.ant-table-bordered>.ant-table-container>.ant-table-content>table>thead>tr>th {
+ border-color: #e2e8f0!important;
+}
+.ant-table-small .ant-table-thead>tr>th {
+    background-color: #f1f5f9;
+}
+
+/* Perfect scrollbar */
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+/* Quill */
+@import '~quill/dist/quill.snow.css';

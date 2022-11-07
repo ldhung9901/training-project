@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: mes-factory-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: mes-factory
+  template:
+    metadata: 
+      labels: 
+        app: mes-factory
+    spec:
+      containers: 
+        - name: mes-factory
+          image: 0868436291/mes_factory:test
+          ports:
+            - containerPort: 80
+              name: mes-port
+          imagePullPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: mes-factory-clusterip-service
+spec:
+  type: ClusterIP
+  selector:
+    app: mes-factory
+  ports:
+    - name: mes-port
+      protocol: TCP
+      port: 80
+      targetPort: 80

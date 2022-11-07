@@ -1,0 +1,17 @@
+{
+    "d": [
+      {
+        "tag": "Order_Id",
+        "value": "LSX00999"
+      },
+      {
+        "tag": "Item_Name",
+        "value": "Nhíp lá 20x20x2"
+      },
+      {
+        "tag": "Needed_Item_Quantity",
+        "value": 20
+      }
+    ],
+    "ts": "2022-01-19T13:28:22+0000"
+  }

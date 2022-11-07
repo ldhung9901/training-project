@@ -1,0 +1,115 @@
+<ng-container *ngIf="this.data">
+    <div class="py-4 flex-auto overflow-y-auto">
+        <mat-tab-group class="sm:px-2 px-6" [animationDuration]="'0'" (selectedTabChange)="tabChanged($event)">
+            <mat-tab label="{{'maintenance.item_quota'|transloco}}">
+                <div class="mx-6 p-6 bg-card shadow rounded-2xl overflow-hidden" *ngIf="this.data.actionEnum == 2">
+                    <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                        <div class="flex-1">
+                            <cm_select_server_side *ngIf="this.data.actionEnum ==2" [errorModel]="errorModel"
+                                [label]="'maintenance.name_item'" [link]="'/sys_item.ctr/getListUse/'"
+                                [dataFilter]="dataFilter" [keyError]="'db.id_item_bom'" [(objectChose)]="item_bom_chose"
+                                [callbackChange]="bind_data_item_bomchose.bind(this)"
+                                [(model)]="record.db.id_item_bom">
+                            </cm_select_server_side>
+                        </div>
+                        <div class="flex-1">
+                            <cm_select_server_side [label]="'NAV.sys_item_specification'" *ngIf="this.data.actionEnum ==2"
+                                [link]="'/sys_item_specification.ctr/getListUse/'" [listData]="listData_specification"
+                                [dataFilter]="dataFilter_specification" [(objectChose)]="item_chose_specification"
+                                [callbackChange]="bind_data_item_specification_chose.bind(this)"
+                                [(model)]="record.db.id_specification"></cm_select_server_side>
+                        </div>
+                        <div class="flex-1">
+                            <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'maintenance.quota'"
+                                [actionEnum]="actionEnum" [labelAddString]="record.sys_item_bom_unit_name"
+                                [type]="'number'" [keyError]="'db.quota'" [(model)]="record.db.quota"></cm_input>
+
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                        <div class="flex-1">
+                            <cm_select [errorModel]="errorModel" [label]="'maintenance.phase'" [actionEnum]="actionEnum"
+                                [keyError]="'db.id_phase'" [listData]="listPhase" [(model)]="record.db.id_phase"
+                                [(objectChose)]="item_chose_phase" [callbackChange]="bind_data_phase_choose.bind(this)">
+                            </cm_select>
+                        </div>
+                        <div class="flex-2">
+                            <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.note'"
+                                [keyError]="'db.note'" [(model)]="record.db.note"></cm_input>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                        <div align="end">
+                            <button (click)="addDetail()" mat-flat-button [color]="'primary'"><label
+                                    transloco="add"></label></button>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="mx-6 p-6 bg-card shadow rounded-2xl overflow-hidden">
+                    <div class="w-full">
+                        <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzData]="list_item_quota"
+                            [nzFrontPagination]="false" [nzLoading]="pageLoading" [nzTotal]="total"
+                            [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+                            (nzQueryParams)="onQueryParamsChange($event)">
+                            <thead>
+                                <tr>
+                                    <th style="width: 75px" *ngIf="this.data.actionEnum !=3"></th>
+                                    <th transloco="maintenance.no_"></th>
+                                    <th transloco="maintenance.phase"></th>
+                                    <th transloco="maintenance.item_code"></th>
+                                    <th transloco="maintenance.item_name"></th>
+                                    <th transloco="maintenance.specification"></th>
+                                    <th transloco="maintenance.quota"></th>
+                                    <th transloco="note"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list_item_quota; index as i">
+                                    <td [nzAlign]="'center'" class="px-2" *ngIf="this.data.actionEnum !=3">
+                                        <button mat-icon-button (click)="deleteDetailOld(item.db.id,i)">
+                                            <mat-icon [svgIcon]="'heroicons_outline:trash'"
+                                                class="icon-size-5 text-red-500 mr-2"></mat-icon>
+                                        </button>
+                                    </td>
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{item.phase_name}}</td>
+                                    <td>{{item.sys_item_code}}</td>
+                                    <td>{{item.sys_item_bom_name}}</td>
+                                    <td>{{item.specification_name}}</td>
+                                    <td>
+                                        <nz-input-number [nzDisabled]="this.data.actionEnum != 3 ? false : true"
+                                            [(ngModel)]="item.db.quota" (nzBlur)="changeTimeQuota(item,newData.value)"
+                                             [nzMin]="0" [nzStep]="1" #newData>
+                                        </nz-input-number>
+                                    </td>
+                                    <td>{{item.db.note}}</td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+
+                </div>
+            </mat-tab>
+            <mat-tab label="{{ 'maintenance.product_phase'| transloco}}">
+
+            </mat-tab>
+            <mat-tab label="{{ 'NAV.tool' | transloco}}">
+
+            </mat-tab>
+            <mat-tab label="{{ 'maintenance.product_quality' | transloco}}">
+                <sys_item_bom_detail_quality [data]="this.data">
+
+                </sys_item_bom_detail_quality>
+            </mat-tab>
+            <mat-tab label="{{'maintenance.specification_name' | transloco}}">
+
+            </mat-tab>
+            <mat-tab label="{{ 'maintenance.blueprint' | transloco}}">
+
+            </mat-tab>
+
+        </mat-tab-group>
+
+    </div>
+</ng-container>

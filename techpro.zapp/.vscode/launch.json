@@ -1,0 +1,35 @@
+
+{
+"version": "0.2.0",
+  "compounds": [
+    {
+      "name": ".Net+Browser",
+      "configurations": [".NET Core Start", "Launch Chrome"]
+    }
+  ],
+  "configurations": [
+
+    {
+      "name": ".NET Core Start",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      // If you have changed target frameworks, make sure to update the program path.
+      "program": "${workspaceFolder}/techpro.zapp/bin/Debug/net6.0/techpro.zapp.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/techpro.zapp",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    {
+      "name": "Launch Chrome",
+      "request": "launch",
+      "type": "chrome",
+      "webRoot": "${workspaceFolder}/techpro.zapp/ClientApp",
+      "sourceMaps": true,
+      "url": "https://localhost:5001"
+    }
+  ]
+}

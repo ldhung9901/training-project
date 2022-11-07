@@ -1,0 +1,185 @@
+<div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100" *ngIf="!editMode">
+    <div class="flex flex-row justify-end space-x-2 mb-4">
+        <button class="mr-3" mat-flat-button [color]="'primary'" (click)="toggleEditMode(true)">
+            <mat-icon class="icon-size-5 mr-2" [svgIcon]="'heroicons_solid:pencil-alt'">
+            </mat-icon>
+            <label transloco="edit"></label>
+        </button>
+    </div>
+    <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-6 grid-flow-row gap-6 w-full">
+            <div class="relative flex items-center justify-center w-42 h-53  overflow-hidden ring-4 ring-bg-card">
+                <div *ngIf="actionEnum==3" class="w-32 h-44 border rounded overflow-hidden">
+                    <ng-container *ngIf="datacompany.db_company.pathimg; else noImage">
+                        <img class="w-full h-full object-cover" [src]="datacompany.db_company.pathimg"
+                            onerror="this.src='assets/images/logo/techpro.png';">
+                    </ng-container>
+                    <ng-template #noImage>
+                        <img class="w-full h-full object-cover"
+                            [src]="'assets/images/logo/techpro.png'">
+                    </ng-template>>
+                </div>
+                <!-- Upload / Remove avatar -->
+                <!-- <div class="absolute inset-0 bg-gray-400 bg-opacity-50 z-10"></div> -->
+
+                <!-- Image/Letter -->
+                <img class="object-cover w-full h-full" *ngIf="datacompany.db_company.pathimg"
+                    [src]="datacompany.db_company.pathimg" onerror="this.src='assets/images/logo/techpro.png';">
+                <img class="object-cover w-full h-full" *ngIf="!datacompany.db_company.pathimg"
+                    [src]="'assets/images/logo/techpro.png'">
+            </div>
+            <div class="flex flex-col flex-auto mb-4 w-full col-span-5" *ngIf="datacompany">
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <mat-form-field class="w-full fuse-mat-dense">
+                            <mat-label>{{'system.name'|transloco}}</mat-label>
+
+                            <input readonly="true" matInput [(ngModel)]="datacompany.db_company.name" />
+
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <mat-form-field class="w-full fuse-mat-dense">
+                            <mat-label>{{'system.address'|transloco}}</mat-label>
+                            <input readonly="true" matInput [(ngModel)]="datacompany.db_company.address" />
+
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <mat-form-field class="w-full fuse-mat-dense">
+                            <mat-label>{{'system.phone'|transloco}}</mat-label>
+                            <input readonly="true" matInput [(ngModel)]="datacompany.db_company.phone" />
+
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-1">
+                        <mat-form-field class="w-full fuse-mat-dense">
+                            <mat-label>{{'system.tax_number'|transloco}}</mat-label>
+                            <input readonly="true" matInput [(ngModel)]="datacompany.db_company.tax_number" />
+
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-1">
+                        <mat-form-field class="w-full fuse-mat-dense">
+                            <mat-label>{{'system.customer_service'|transloco}}</mat-label>
+                            <input readonly="true" matInput [(ngModel)]="datacompany.db_company.user_service" />
+
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- EDIT -->
+<div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100" *ngIf="editMode">
+    <div class="flex flex-row justify-end space-x-2 mb-4">
+        <button class="mr-4 text-red-500 font-semibold hover:text-hint cursor-pointer" (click)="toggleEditMode(false)">
+            <label transloco="cancel"></label>
+        </button>
+        <button mat-flat-button [color]="'primary'" (click)="save()">
+            <mat-icon class="mr-2" svgIcon="heroicons_solid:save"></mat-icon>
+            <label transloco="save"></label>
+        </button>
+    </div>
+    <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-6 grid-flow-row gap-6 w-full">
+            <div class="relative flex items-center justify-center w-42 h-53  overflow-hidden ring-4 ring-bg-card">
+                <div *ngIf="actionEnum==3" class="w-32 h-44 border rounded overflow-hidden">
+                    <ng-container *ngIf="datacompany.db_company.pathimg; else noImage">
+                        <img class="w-full h-full object-cover" [src]="datacompany.db_company.pathimg"
+                            onerror="this.src='assets/images/logo/techpro.png';">
+                    </ng-container>
+                    <ng-template #noImage>
+                        <img class="w-full h-full object-cover"
+                            [src]="'assets/images/logo/techpro.png'">
+                    </ng-template>>
+                </div>
+                <!-- Upload / Remove avatar -->
+                <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-20">
+                    <div>
+                        <input id="avatar-file-input" (change)="selectFile($event)"
+                            class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                            type="file" [multiple]="false" [accept]="'image/jpeg, image/png'"
+                            #avatarFileInput>
+                        <label
+                            class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
+                            for="avatar-file-input" matRipple>
+                            <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'">
+                            </mat-icon>
+                        </label>
+                    </div>
+                    <div>
+                        <button mat-icon-button (click)="removeItemImg()">
+                            <mat-icon class="text-white" [svgIcon]="'heroicons_outline:trash'">
+                            </mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <!-- Image/Letter -->
+                <img class="object-cover w-full h-full" *ngIf="datacompany.db_company.pathimg"
+                    [src]="datacompany.db_company.pathimg" onerror="this.src='assets/images/logo/techpro.png';">
+                <img class="object-cover w-full h-full" *ngIf="!datacompany.db_company.pathimg"
+                    [src]="'assets/images/logo/techpro.png'">
+            </div>
+            <div class="flex flex-col flex-auto mb-4 w-full col-span-5" *ngIf="datacompany">
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <mat-form-field class="w-full fuse-mat-dense">
+                            <mat-label>{{'system.name'|transloco}}
+                                <span class="text-red-500 italic font-semibold"
+                                    *ngFor="let item of errorModel | filter : 'key' : 'db_company.name' ;  index as i;">
+                                    (<span *ngFor="let msg of item.value">
+                                        {{msg | transloco}}
+                                    </span>)
+                                </span>
+                            </mat-label>
+                            <input readonly="false" matInput [(ngModel)]="datacompany.db_company.name" />
+
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <mat-form-field class="w-full fuse-mat-dense">
+                            <mat-label>{{'system.address'|transloco}}</mat-label>
+                            <input readonly="false" matInput [(ngModel)]="datacompany.db_company.address" />
+
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <mat-form-field class="w-full fuse-mat-dense">
+                            <mat-label>{{'system.phone'|transloco}}</mat-label>
+                            <input readonly="false" matInput [(ngModel)]="datacompany.db_company.phone" />
+
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-1">
+                        <mat-form-field class="w-full fuse-mat-dense">
+                            <mat-label>{{'system.tax_number'|transloco}}</mat-label>
+                            <input readonly="false" matInput [(ngModel)]="datacompany.db_company.tax_number" />
+
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-1">
+                        <mat-form-field class="w-full fuse-mat-dense">
+                            <mat-label>{{'system.customer_service'|transloco}}</mat-label>
+                            <input readonly="false" matInput [(ngModel)]="datacompany.db_company.user_service" />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

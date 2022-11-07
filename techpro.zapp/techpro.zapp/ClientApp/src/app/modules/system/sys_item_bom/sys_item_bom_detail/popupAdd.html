@@ -1,0 +1,77 @@
+<div class="flex flex-col flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium" transloco="maintenance.item_bom_config"></div>
+        <button mat-icon-button (click)="close()">
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-7 text-white"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+        <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1" *ngIf="actionEnum==1" >
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.config_code'"
+                    [keyError]="'db.config_code'"
+                        [(model)]="record.db.config_code"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.config_name'"
+                        [keyError]="'db.name'" [(model)]="record.db.name"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.apply_day'"
+                        [type]="'datepicker'" [keyError]="'db.apply_day'" [(model)]="record.db.aplly_date">
+                    </cm_input>
+                </div>
+                <div class="flex-1 m-auto text-end">
+                    <mat-slide-toggle class="font-medium cursor-pointer" [color]="'primary'"
+                        [(checked)]="record.db.status_use" (change)="changeStatus($event)" [(ngModel)]="record.db.status_use">
+                        {{'system.use' | transloco}}
+                    </mat-slide-toggle>
+                </div>
+
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_select_server_side *ngIf="actionEnum==1" [errorModel]="errorModel"
+                        [label]="'maintenance.name_item'" [link]="'/sys_item.ctr/getListUse/'" [dataFilter]="dataFilter"
+                        [keyError]="'db.id_item'" [(objectChose)]="item_bom_chose"
+                        [callbackChange]="bind_data_item_bomchose.bind(this)" [(model)]="record.db.id_item">
+                    </cm_select_server_side>
+                </div>
+                <div class="flex-1">
+                    <cm_select_server_side [label]="'NAV.sys_item_specification'" *ngIf="actionEnum==1"
+                        [link]="'/sys_item_specification.ctr/getListUse/'" [listData]="listData_specification"
+                        [dataFilter]="dataFilter_specification" [(objectChose)]="item_chose_specification"
+                        [callbackChange]="bind_data_item_specification_chose.bind(this)"
+                        [(model)]="record.db.id_specification"></cm_select_server_side>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+
+
+                <div class="flex-2">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'note'"
+                        [keyError]="'db.note'" [(model)]="record.db.note"></cm_input>
+                </div>
+            </div>
+
+        </div>
+        <br />
+
+        <div class="flex flex-row justify-end space-x-2">
+
+            <button *ngIf="actionEnum!=3" (click)="save_config()" mat-flat-button [color]="'primary'">
+                <label transloco="save"></label>
+            </button>
+        </div>
+    </div>
+
+
+
+
+
+</div>

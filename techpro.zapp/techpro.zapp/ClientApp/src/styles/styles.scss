@@ -1,0 +1,334 @@
+/* ----------------------------------------------------------------------------------------------------- */
+/*  @ Import/write your custom styles here.
+/*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
+/* ----------------------------------------------------------------------------------------------------- */
+input[nz-input] {
+
+    min-width: 150px !important;
+}
+
+.my-full-screen-dialog {
+    max-width: 100vw !important;
+    box-sizing: border-box;
+}
+input[nz-select]{
+    min-width: 180px !important;
+}
+.ant-picker-input>input{
+    min-width: 100px !important;
+}
+
+nz-radio-group.ant-radio-group.ng-untouched.ng-pristine.ng-valid {
+    width: 100% !important;
+}
+
+.my-full-screen-dialog .mat-dialog-container {
+    border-radius: 0 !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    width: 100vw !important;
+}
+
+// Alert message
+.swal2-popup {
+    width: 26em !important;
+    height: fit-content !important;
+    border-radius: 15px!important;
+}
+.swal2-icon {
+    transform: scale(0.8);
+}
+.swal2-icon.swal2-success {
+    border-color: #50cd89 !important;
+    color: #50cd89 !important;
+}
+.swal2-styled.swal2-confirm {
+    background-color: #4f46e5 !important;
+}
+// mat-select
+.mat-select-panel mat-option.mat-option {
+    height: unset;
+  }
+
+ .mat-option-text.mat-option-text {
+    white-space: normal;
+  }
+.mat-form-field-suffix {
+    top: unset !important;
+}
+
+.mat-dialog-content {
+    max-height: 85vh !important;
+}
+.ant-radio {
+    margin-left: auto;
+    margin: 5px;
+    top: 0.2em;
+    display: inline-block;
+    outline: 0;
+}
+span.ant-radio+* {
+    margin-left: 10px;
+    padding-right: 8px;
+    padding-left: 8px;
+    display: contents;
+    width: 100% !important;
+}
+input.ant-radio+*{
+    margin-right: 10px;
+}
+.font-semibold.leading-5.truncate {
+    text-align: start;
+}
+input[autonumeric],
+span[autonumeric] {
+    text-align: right;
+}
+
+a, a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+// nz-table{
+//     th {
+//         // padding: 12px 25px !important;
+//         // flex-wrap: nowrap !important;
+//         white-space: nowrap !important;
+//         min-width: max-content !important;
+//     }
+//     td{
+//         // border-right: none!important;
+//         // border-left: none!important;
+//         // padding: 12px 25px !important;
+//         white-space: nowrap !important;
+//         min-width: max-content !important;
+//         overflow: hidden !important;
+//     }
+// }
+// nz-table{
+//     th {
+//         padding: 15px 25px !important;
+//         // flex-wrap: nowrap !important;
+//         white-space: nowrap !important;
+//     }
+//     td{
+//         // border-right: none!important;
+//         // border-left: none!important;
+//         padding: 12px 25px !important;
+//         white-space: nowrap !important;
+//         overflow: hidden !important;
+//     }
+// }
+// th {
+//     width: fit-content;
+//     // padding: 15px 25px !important;
+// }
+// td{
+//     // border-right: none!important;
+//     // border-left: none!important;
+//     // padding: 8px 25px !important;
+//     white-space: nowrap !important;
+//     overflow: hidden !important;
+// }
+
+.mat-dialog-container {
+    max-height: 100vh !important;
+}
+
+
+
+.sys_approval_table tbody tr:nth-child(even) {
+    background-color: inherit !important;
+}
+
+body.theme-default .mat-card:not([class*=mat-elevation-z]) {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.mat-tab-group-dynamic-height {
+    .mat-tab-body-content {
+        padding: 10px;
+    }
+}
+
+
+.mat-dialog-content {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    background-color: #F0F0F0
+}
+
+.mat-dialog-container {
+    background-color: #F0F0F0 !important;
+}
+
+
+
+.mat-form-field-appearance-outline {
+    input {
+        height: 20px;
+    }
+}
+
+.mat-form-field-appearance-outline.read-only-input {
+    .mat-form-field-outline {
+        background-color: lightgray;
+    }
+
+    input {
+        color: black
+    }
+}
+
+
+
+
+
+
+
+.mat-checkbox-layout {
+    padding-left: 5px;
+}
+
+.md-datepicker-calendar-pane {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1151;
+    border-width: 1px;
+    border-style: solid;
+    background: transparent;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    transition: -webkit-transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.md-datepicker-calendar-pane.md-pane-open {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+.error-message {
+    color: red;
+}
+
+
+.no-data-available {
+    text-align: center;
+}
+
+.mat-button-action {
+    color: #1F2937 !important;
+    background: #e5e7eb !important;
+}
+
+
+.mat-input-full-width {
+    border-bottom: 1px solid;
+    padding: 3px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    width: 100%;
+
+    input {
+        width: 99%;
+    }
+}
+
+.listButtonAction {
+    button {
+        margin-right: 10px !important;
+    }
+}
+
+
+
+
+button:focus {
+    outline: none !important;
+}
+
+body {
+    background-color: ghostwhite !important;
+}
+
+
+
+
+
+.ant-empty-image img {
+    margin: auto;
+}
+
+
+
+
+
+
+
+
+.dark .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex {
+    border-color: #464545!important;
+}
+
+.dark .mat-form-field.mat-form-field-appearance-fill.mat-form-field-disabled .mat-form-field-wrapper .mat-form-field-flex {
+    border-color: #464545!important;
+}
+
+
+
+
+.ant-checkbox-checked .ant-checkbox-inner::after {
+    left: 2.7px;
+}
+
+.ant-empty-image img {
+    width: auto;
+}
+
+
+
+
+img.nz-image{
+    display: initial;
+}
+
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, .9);
+}
+
+.mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-subscript-wrapper {
+    position: absolute;
+}
+
+.hover-show-button {
+    z-index: 2;
+    display: none;
+}
+
+.mydivoutermulti:hover .hover-show-button {
+    display: block;
+}

@@ -1,0 +1,153 @@
+<div class="flex flex-col flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium" transloco="quality.quality_config"></div>
+        <button mat-icon-button (click)="closeCustom()">
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-7 text-white"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+        <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.config_code'"
+                        [(model)]="record.db.config_code"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.apply_day'"
+                        [type]="'datepicker'" [keyError]="'db.apply_day'" [(model)]="record.db.aplly_date">
+                    </cm_input>
+                </div>
+                <div class="flex-1 place-self-end m-auto">
+                    <mat-slide-toggle class="font-medium cursor-pointer" [color]="'primary'" [checked]="isChecked"
+                        (change)="changeStatus($event)" [(ngModel)]="record.db.status_use">
+                        {{'system.use' | transloco}}
+                    </mat-slide-toggle>
+                </div>
+
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.config_name'"
+                        [keyError]="'db.object_'" [(model)]="record.db.config_name"></cm_input>
+                </div>
+                <div class="flex-2">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'note'"
+                        [keyError]="'db.note'" [(model)]="record.db.note"></cm_input>
+                </div>
+            </div>
+
+        </div>
+        <br />
+
+        <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_input [label]="'quality.content'" [actionEnum]="actionEnum" [keyError]="'db.content_config'"
+                        [errorModel]="errorModel" [(model)]="addItem.config_content"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [label]="'quality.description'" [actionEnum]="actionEnum" [keyError]="'db.description'"
+                        [errorModel]="errorModel" [(model)]="addItem.description"></cm_input>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_select [errorModel]="errorModel" [label]="'quality.type_evaluate'" [errorModel]="errorModel"
+                        [actionEnum]="actionEnum" [keyError]="'db.type_evaluate '" [listData]="list_type_evaluate"
+                        [(model)]="addItem.type_evaluate"></cm_select>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap"
+                *ngIf="addItem.type_evaluate=='number'">
+                <div class="flex-1">
+                    <cm_input [label]="'quality.number_evaluate'" [type]="'number'" [(model)]="addItem.number_evaluate">
+                    </cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'quality.error_range_start'"
+                        [type]="'number'" [keyError]="'db.error_range_start'" [(model)]="addItem.error_range_start">
+                    </cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'quality.error_range_end'"
+                        [type]="'number'" [keyError]="'db.error_range_end'" [(model)]="addItem.error_range_end">
+                    </cm_input>
+                </div>
+            </div>
+            <div align="end">
+                <button (click)="addDetail()" mat-flat-button [color]="'primary'"><label
+                        transloco="add"></label></button>
+            </div>
+        </div>
+
+        <br />
+        <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="w-full">
+                <div> <span class="text-red-500 italic font-semibold"
+                        *ngFor="let item of errorModel | filter : 'key' : 'list_item' ; index as i;"> (<span
+                            *ngFor="let msg of item.value"> {{msg | transloco}} </span>) </span>
+
+                    <nz-table nzBordered="true" nzSize="small" #basicTable1 [nzLoading]="loading"
+                        nzShowPagination="true" [nzData]="this.record.list_item_quality">
+                        <thead>
+
+                            <tr>
+                                <th style="width:75px" *ngIf="actionEnum!=3"></th>
+                                <th transloco="system.no_" style="width:50px; text-align:center"></th>
+                                <th transloco="quality.content"></th>
+                                <th transloco="quality.description"></th>
+                                <th transloco="quality.type_evaluate"></th>
+                                <th transloco="quality.number_evaluate"></th>
+                                <th transloco="quality.error_range"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container>
+                                <ng-container *ngFor="let item of basicTable1.data; index as i;">
+                                    <tr>
+                                        <td [nzAlign]="'center'" class="px-2" *ngIf="actionEnum!=3">
+                                            <button mat-icon-button (click)="deleteDetailOld(i)">
+                                                <mat-icon [svgIcon]="'heroicons_outline:trash'"
+                                                    class="icon-size-5 text-red-500 mr-2"></mat-icon>
+                                            </button>
+                                        </td>
+                                        <td style="text-align:center">{{ i+1 }}</td>
+                                        <td>{{ item.config_content }}</td>
+                                        <td>{{ item.description }}</td>
+                                        <td class="text-left">{{ item.type_evaluate |
+                                            transloco}}</td>
+                                        <ng-container *ngIf="item.type_evaluate=='boolean';else noContent">
+                                            <td></td>
+                                            <td></td>
+                                        </ng-container>
+                                        <ng-template #noContent>
+                                            <td>{{item.number_evaluate}}</td>
+                                            <td class="text-left">Từ {{ item.error_range_start
+                                                | number:'1.0-2'}} đến {{
+                                                item.error_range_end | number:'1.0-2'}}</td>
+                                        </ng-template>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </tbody>
+                    </nz-table>
+
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="flex flex-row justify-end space-x-2">
+
+            <button *ngIf="actionEnum!=3" (click)="save()" mat-flat-button [color]="'primary'">
+                <label transloco="save"></label>
+            </button>
+        </div>
+    </div>
+
+
+</div>

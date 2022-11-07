@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.0" />
+    <PackageReference Include="NewId" Version="3.0.2" />
+   
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\techpro.common\techpro.common.csproj" />
+    <ProjectReference Include="..\..\techpro.DataBase\techpro.DataBase.csproj" />
+    <ProjectReference Include="..\techpro.system.data\techpro.system.data.csproj" />
+
+  </ItemGroup>
+
+</Project>

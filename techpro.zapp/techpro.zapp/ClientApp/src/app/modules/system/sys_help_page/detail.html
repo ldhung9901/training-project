@@ -1,0 +1,33 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center py-2 pl-4 pr-6 sm:py-4 md:pl-6 md:pr-8 border-b bg-card dark:bg-transparent">
+        <!-- Title & Actions -->
+        <button mat-icon-button [routerLink]="['sys_help_page_index']">
+            <mat-icon [svgIcon]="'heroicons_outline:arrow-sm-left'" (click)="close()"></mat-icon>
+        </button>
+
+        <div class="mx-auto items-stretch">
+            <span class="flex-start text-md align-middle sm:text-4xl font-bold tracking-tight truncate">
+                {{record?.db.title}}
+            </span>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto overflow-y-auto" cdkScrollable>
+        <!-- Steps -->
+        <mat-tab-group class="fuse-mat-no-header" [animationDuration]="'200'" #courseSteps>
+            <mat-tab>
+                <ng-template matTabContent>
+                    <div class="prose prose-sm max-w-5xl mx-auto sm:my-2 lg:mt-4 p-6 sm:p-10 sm:py-12 rounded-2xl shadow overflow-hidden bg-card"
+                        [innerHTML]="record?.db.note">
+                    </div>
+                </ng-template>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+
+
+</div>

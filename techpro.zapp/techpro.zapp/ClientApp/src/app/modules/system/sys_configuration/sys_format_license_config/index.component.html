@@ -1,0 +1,132 @@
+<div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100" *ngIf="!editMode">
+    <div class="flex flex-row justify-end space-x-2 mb-4">
+        <button class="mr-3" mat-flat-button [color]="'primary'" (click)="toggleEditMode(true)">
+            <mat-icon class="icon-size-5 mr-2" [svgIcon]="'heroicons_solid:pencil-alt'">
+            </mat-icon>
+            <label transloco="edit"></label>
+        </button>
+    </div>
+    <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+            <div class="flex-1">
+                <mat-form-field class="w-full">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input matInput [(ngModel)]="filter.search" (keyup.enter)="rerender()"
+                        placeholder="Tìm kiếm ({{'system.first_character'|transloco}} | {{'system.menu'|transloco}})">
+
+                </mat-form-field>
+            </div>
+            <div class="flex-3">
+            </div>
+        </div>
+        <div class="w-full">
+            <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzTotal]="total" [nzPageSize]="pageSize"
+                [nzPageIndex]="pageIndex" [nzData]="listDataLicense">
+                <thead>
+                    <tr>
+                        <th transloco="system.no_" style="width:50px; text-align:center"></th>
+                        <th transloco="system.first_character"></th>
+                        <th transloco="system.menu"></th>
+                        <th transloco="system.raise"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listDataLicense;  index as i;">
+                        <td style="text-align:center">{{ i+1 }}</td>
+                        <td>{{ item.first_character }}</td>
+                        <td>{{ item.menu }}</td>
+                        <td nzAlign="center">
+                            <label nz-checkbox [(ngModel)]="item.is_raise"></label>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </nz-table>
+        </div>
+
+    </div>
+    <br />
+    <div class="flex flex-row justify-start space-x-2 mb-4 font-medium">
+        <span class="mb-3">Định dạng số chứng từ</span>
+    </div>
+    <cm_select [listData]="list_recepcode"></cm_select>
+</div>
+<!-- EDIT -->
+<div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100" *ngIf="editMode">
+    <div class="flex flex-row justify-end space-x-2 mb-4">
+        <button class="mr-4 text-red-500 font-semibold hover:text-hint cursor-pointer" (click)="toggleEditMode(false)">
+            <label transloco="cancel"></label>
+        </button>
+        <button mat-flat-button [color]="'primary'" (click)="save()">
+            <mat-icon class="mr-2" svgIcon="heroicons_solid:save"></mat-icon>
+            <label transloco="save"></label>
+        </button>
+    </div>
+    <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+            <div class="flex-1">
+                <mat-form-field class="w-full"
+                [ngClass]="{'read-only-input read-only':actionEnum === 3}">
+                <mat-label>
+                    {{"system.first_character" | transloco}}
+                </mat-label>
+                <input [readonly]="actionEnum==3" matInput maxlength="500"
+                    [(ngModel)]="first_character" />
+                <span matSuffix> &nbsp;</span>
+                <mat-hint class="text-right">{{first_character?.length}} / 500</mat-hint>
+            </mat-form-field>
+            </div>
+            <div class="flex-1">
+                <cm_select [label]="'system.menu'" [actionEnum]="actionEnum" [listData]="listMenu"
+                    [(model)]="menu">
+                </cm_select>
+            </div>
+            <div class="flex-1">
+                <button mat-flat-button [color]="'primary'" class="mt-6" (click)="addNewLicenseList();">
+                    <label transloco="add"></label>
+                </button>
+            </div>
+            <div class="flex-1">
+            </div>
+        </div>
+        <br />
+        <div class="w-full">
+            <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzTotal]="total" [nzPageSize]="pageSize"
+                [nzPageIndex]="pageIndex" [nzData]="listDataLicense">
+                <thead>
+                    <tr>
+                        <th style="width:75px"></th>
+                        <th transloco="system.no_" style="width:50px; text-align:center"></th>
+                        <th transloco="system.first_character"></th>
+                        <th transloco="system.menu"></th>
+                        <th transloco="system.raise"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listDataLicense;  index as i;">
+                        <td *ngIf="actionEnum!=3">
+                            <button mat-icon-button (click)="deleteLicenseList(i)">
+                                <mat-icon [svgIcon]="'heroicons_outline:trash'"
+                                    class="icon-size-5 text-red-500 mr-2"></mat-icon>
+                            </button>
+                        </td>
+                        <td style="text-align:center">{{ i+1 }}</td>
+                        <td>{{ item.first_character }}</td>
+                        <td>{{ item.menu }}</td>
+                        <td nzAlign="center">
+                            <label nz-checkbox [(ngModel)]="item.is_raise"></label>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </nz-table>
+        </div>
+
+    </div>
+    <br />
+    <div class="flex flex-row justify-start space-x-2 mb-4 font-medium">
+        <span class="mb-3">Định dạng số chứng từ</span>
+    </div>
+    <cm_select [listData]="list_recepcode"></cm_select>
+
+</div>

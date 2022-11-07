@@ -1,0 +1,129 @@
+
+<div class="flex flex-col flex-auto min-w-0 ">
+    <!-- Main -->
+    <div class="flex-auto p-3 sm:pt-3 sm:p-10">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+    <h1 mat-dialog-title class="dark:text-white" transloco="NAV.sys_opc_view"></h1>
+     <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+            <div class="flex-1">
+                <cm_select [label]="'NAV.sys_workstation'"
+                                       [listData]="list_workstation"
+                                       [(objectChose)]="workstation_chose"
+                                       [callbackChange]="workstation_change.bind(this)"
+                                       [(model)]="filter.id_workstation"></cm_select>
+
+
+                <!--[callbackChange]="rerender.bind(this)"-->
+            </div>
+            <div class="flex-1">
+                <cm_select [label]="'NAV.sys_template_opc'"
+                           [listData]="list_workstation_template_opc"
+                           [(objectChose)]="workstation_template_chose"
+                           [callbackChange]="workstation_template_change.bind(this)"
+                           [(model)]="filter.id_template_opc"></cm_select>
+
+            </div>
+        </div>
+    </div>
+   <br />
+   <div class="p-6 bg-card shadow rounded-2xl overflow-hidden" *ngIf="workstation_config.list_param.length>0">
+       <div class="w-full">
+            <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzData]="listData"  [nzFrontPagination]="false" [nzLoading]="pageLoading"
+                        [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+                        (nzQueryParams)="onQueryParamsChange($event)">
+               <thead>
+                   <tr>
+                       <th style="width:100px"></th>
+                       <th colspan="100">
+
+                       </th>
+                   </tr>
+               </thead>
+               <tbody>
+
+                   <tr>
+                       <td transloco="system.parameter" style="font-weight:bolder"></td>
+                       <td *ngFor="let item of workstation_config.list_param;  index as i;" style="font-weight:bolder">
+                           {{item.name}}
+                       </td>
+
+                   </tr>
+                   <tr>
+                       <td transloco="system.value"></td>
+                       <td *ngFor="let item of workstation_config.list_param;  index as i;">
+                           {{item.value}}
+                       </td>
+                   </tr>
+                   <tr>
+                       <td transloco="NAV.sys_unit"></td>
+                       <td *ngFor="let item of workstation_config.list_param;  index as i;">
+                           {{item.unit_name}}
+                       </td>
+                   </tr>
+               </tbody>
+
+           </nz-table>
+       </div>
+
+    </div>
+    <br />
+     <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="w-full">
+            <!-- <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzData]="listData"  [nzFrontPagination]="false" [nzLoading]="pageLoading"
+                        [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+                        (nzQueryParams)="onQueryParamsChange($event)">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="width:100px"></th>
+                        <th transloco="NAV.production_order" rowspan="2" style="width:100px"></th>
+                        <th transloco="NAV.sys_item" rowspan="2"></th>
+                        <th transloco="system.quantity" colspan="4" style="text-align:center!important">
+
+                        </th>
+                        <th transloco="status" rowspan="2" style="width:100px"> </th>
+                    </tr>
+                    <tr>
+                        <th transloco="system.production_order_quantity"></th>
+                        <th transloco="system.input"></th>
+                        <th transloco="system.output"></th>
+                        <th transloco="system.error"></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of list_production_order;  index as i;">
+                        <td>
+                            <button *ngIf="item.run_status==1" class="mat-button-action" mat-button transloco="system.perform" (click)="perform(item,i)"></button>
+                            <button *ngIf="item.run_status==2" class="mat-button-action" mat-button transloco="system.stop" (click)="stop(item,i)"></button>
+                        </td>
+                        <td>{{item.production_order_number}} </td>
+                        <td>{{item.item_full_name}} </td>
+                        <td>
+                            {{item.quantity_unit_main | number }} {{item.unit_main_name}}
+                            <span *ngIf="item.type_add!=1">
+                                <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
+                                {{ item.quantity | number }} {{item.unit_name}}
+                            </span>
+                        </td>
+                        <td>{{item.run_status==1?"":item.run_status==2? workstation_config.value_input :item.value_input }} </td>
+                        <td>{{item.run_status==1?"":item.run_status==2? workstation_config.value_output :item.value_output }}</td>
+                        <td>{{item.run_status==1?"":item.run_status==2? workstation_config.value_output :item.value_error }}</td>
+                        <td>
+
+                            <span *ngIf="item.run_status==1" transloco="system.waiting" style="color:blue"></span>
+                            <span *ngIf="item.run_status==2" transloco="system.processing" style="color:orangered"></span>
+                            <span *ngIf="item.run_status==3" transloco="system.stop" style="color:forestgreen"></span>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </nz-table> -->
+        </div>
+
+    </div>
+
+
+</div>
+</div></div>

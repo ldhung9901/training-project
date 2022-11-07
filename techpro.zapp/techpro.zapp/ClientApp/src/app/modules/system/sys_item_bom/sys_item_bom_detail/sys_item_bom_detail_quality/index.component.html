@@ -1,0 +1,108 @@
+<div class="py-4 flex-auto overflow-y-auto">
+    <ng-container *ngIf="this.data.actionEnum == 2">
+        <div class="mx-6 p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+
+                <div class="flex-1">
+                    <cm_input [label]="'quality.content'" [actionEnum]="2" [keyError]="'db.content_config'"
+                        [errorModel]="errorModel" [(model)]="addItem.db.content"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [label]="'quality.description'" [actionEnum]="2" [keyError]="'db.description'"
+                        [errorModel]="errorModel" [(model)]="addItem.db.description"></cm_input>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_select [errorModel]="errorModel" [label]="'maintenance.phase'" [actionEnum]="2"
+                        [keyError]="'db.id_phase'" [listData]="listPhase" [(model)]="addItem.db.id_phase"
+                        [(objectChose)]="item_chose_phase" [callbackChange]="bindDataPhaseChoose.bind(this)">
+                    </cm_select>
+                </div>
+                <div class="flex-1">
+                    <cm_select [errorModel]="errorModel" [label]="'quality.type_evaluate'" [errorModel]="errorModel"
+                        [actionEnum]="2" [keyError]="'db.type_evaluate '" [listData]="list_type_evaluate"
+                        [(model)]="addItem.db.type_evaluate"></cm_select>
+                </div>
+                <div class="flex-2" *ngIf="addItem.db.type_evaluate!='number'"></div>
+                <div class="flex-2" *ngIf="addItem.db.type_evaluate=='number'">
+                    <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                        <div class="flex-1">
+                            <cm_input [label]="'quality.number_evaluate'" [type]="'number'"
+                                [(model)]="addItem.db.number_evaluate">
+                            </cm_input>
+                        </div>
+                        <div class="flex-1">
+                            <cm_input [errorModel]="errorModel" [actionEnum]="2" [label]="'quality.error_range_start'"
+                                [type]="'number'" [keyError]="'db.error_range_start'"
+                                [(model)]="addItem.db.error_range_start">
+                            </cm_input>
+                        </div>
+                        <div class="flex-1">
+                            <cm_input [errorModel]="errorModel" [actionEnum]="2" [label]="'quality.error_range_end'"
+                                [type]="'number'" [keyError]="'db.error_range_end'"
+                                [(model)]="addItem.db.error_range_end">
+                            </cm_input>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div align="end">
+                    <button (click)="addDetail()" mat-flat-button [color]="'primary'"><label
+                            transloco="add"></label></button>
+                </div>
+            </div>
+        </div>
+        <br />
+    </ng-container>
+</div>
+<div class="mx-6 p-6 bg-card shadow rounded-2xl overflow-hidden">
+    <div class="w-full">
+        <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzData]="list_item_quality" [nzFrontPagination]="false"
+            [nzLoading]="pageLoading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+            (nzQueryParams)="onQueryParamsChange($event)">
+            <thead>
+                <tr>
+                    <th style="width: 75px" *ngIf="this.data.actionEnum !=3"></th>
+                    <th transloco="maintenance.no_"></th>
+                    <th transloco="maintenance.phase"></th>
+                    <th transloco="quality.content"></th>
+                    <th transloco="quality.description"></th>
+                    <th transloco="quality.type_evaluate"></th>
+                    <th transloco="quality.number_evaluate"></th>
+                    <th transloco="quality.error_range"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of list_item_quality; index as i">
+                    <td [nzAlign]="'center'" class="px-2" *ngIf="this.data.actionEnum !=3">
+                        <button mat-icon-button (click)="deleteDetailOld(item.db.id,i)">
+                            <mat-icon [svgIcon]="'heroicons_outline:trash'" class="icon-size-5 text-red-500 mr-2">
+                            </mat-icon>
+                        </button>
+                    </td>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{item.phase_name}}</td>
+                    <td>{{item.db.content}}</td>
+                    <td>{{item.db.description}}</td>
+                    <td class="text-left">{{ item.db.type_evaluate |
+                        transloco}}</td>
+                    <ng-container *ngIf="item.db.type_evaluate=='boolean';else noContent">
+                        <td></td>
+                        <td></td>
+                    </ng-container>
+                    <ng-template #noContent>
+                        <td>{{item.db.number_evaluate}}</td>
+                        <td class="text-left">Từ {{ item.db.error_range_start
+                            | number:'1.0-2'}} đến {{
+                            item.db.error_range_end | number:'1.0-2'}}</td>
+                    </ng-template>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+
+</div>

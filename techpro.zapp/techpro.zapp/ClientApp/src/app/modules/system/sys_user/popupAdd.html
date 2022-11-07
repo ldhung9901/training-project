@@ -1,0 +1,101 @@
+<div class="flex flex-col flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium" transloco="NAV.sys_user"></div>
+        <button mat-icon-button (click)="closeCustom()">
+            <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-7 text-white"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Card form -->
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+        <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+            <div class="flex flex-col flex-wrap space-y-1 justify-center items-center mb-4">
+                <div class="flex-1">
+                    <nz-avatar *ngIf="record.db.avatar_path!==''&&record.db.avatar_path!==null" [nzSize]="100"
+                        [nzSrc]="avatar_url"></nz-avatar>
+
+                    <mat-icon *ngIf="record.db.avatar_path===''||record.db.avatar_path===null" class="icon-size-24"
+                        [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                </div>
+
+                <div class="flex-1">
+                    <nz-upload [nzAction]="'/sys_user.ctr/uploadAvatar?id_user='+record.db.Id"
+                        [nzFileListRender]="NoList" [nzFileList]="FileList"
+                        [nzHeaders]="{ authorization: 'authorization-text' }" (nzChange)="handleChange($event)">
+                        <button nz-button>
+                            <i nz-icon nzType="upload"></i>
+                            Click to Upload
+                        </button>
+                    </nz-upload>
+                    <div #NoList></div>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.first_name'"
+                        [keyError]="'db.FirstName'" [(model)]="record.db.FirstName"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.last_name'"
+                        [keyError]="'db.LastName'" [(model)]="record.db.LastName"></cm_input>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.user_phone'"
+                        [keyError]="'db.user_phone'" [(model)]="record.db.phone_number"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.user_email'"
+                        [keyError]="'db.user_email'" [(model)]="record.db.email"></cm_input>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_select [errorModel]="errorModel" *ngIf="actionEnum==1||actionEnum==2"
+                        [label]="'NAV.sys_department'" [keyError]="'db.id_department'" [listData]="listdepartment"
+                        [(model)]="record.db.id_department"></cm_select>
+                    <cm_input [label]="'NAV.sys_department'" *ngIf="actionEnum==3" [actionEnum]="actionEnum"
+                        [(model)]="record.department_name"></cm_input>
+                </div>
+                <div class="flex-1">
+                    <cm_select [errorModel]="errorModel" *ngIf="actionEnum==1||actionEnum==2"
+                        [label]="'NAV.sys_job_title'" [keyError]="'db.id_job_title'" [listData]="listjob_title"
+                        [(model)]="record.db.id_job_title"></cm_select>
+                    <cm_input [label]="'NAV.sys_job_title'" *ngIf="actionEnum==3" [actionEnum]="actionEnum"
+                        [(model)]="record.job_title_name"></cm_input>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                <div class="flex-1">
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.user_name'"
+                        [keyError]="'db.Username'" [(model)]="record.db.Username"></cm_input>
+                </div>
+                <div class="flex-1">
+
+                    <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [type]="'password'"
+                         [label]="'system.password'" [keyError]="'password'"
+                        [(model)]="record.password"></cm_input>
+                </div>
+
+            </div>
+            <div class="flex-1">
+                <cm_input [errorModel]="errorModel" [actionEnum]="actionEnum" [label]="'system.start_work_date'" [type]="'datepicker'"
+                    [keyError]="'db.start_work_date'" [(model)]="record.db.start_work_date"></cm_input>
+            </div>
+        </div>
+        <br />
+        <div class="flex flex-row justify-end space-x-2">
+            <button *ngIf="actionEnum!=3" (click)="save()" mat-flat-button [color]="'primary'">
+                <label transloco="save"></label>
+            </button>
+            <!-- <button class="hidden sm:inline-flex" mat-stroked-button (click)="close()">
+                <span transloco="close"></span>
+            </button> -->
+        </div>
+    </div>
+</div>

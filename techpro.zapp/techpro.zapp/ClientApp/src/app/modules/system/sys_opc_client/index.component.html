@@ -1,0 +1,80 @@
+<mat-progress-bar *ngIf="pageLoading" mode="indeterminate" class="absolute top-0"></mat-progress-bar>
+<div class="flex flex-col flex-auto min-w-0 ">
+    <!-- Main -->
+    <div class="flex-auto p-3 sm:pt-3 sm:p-10">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+    <h1 mat-dialog-title class="dark:text-white" transloco="NAV.sys_opc_client"></h1>
+     <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+            <div class="flex-1">
+
+                <mat-form-field   class="w-full"
+                >
+                <mat-label>
+                    {{'search' | transloco}} ({{ 'system.opcclient' | transloco }} | {{ 'system.name' | transloco }} | {{ 'system.note' | transloco }})
+                </mat-label>
+                <input matInput [(ngModel)]="filter.search" (keyup.enter)="rerender()">
+
+            </mat-form-field>
+            </div>
+            <div class="flex-1">
+                <cm_select [label]="'system.use_status'"
+                           [listData]="listStatusDel"
+                           [(model)]="filter.status_del"
+                           [callbackChange]="rerender.bind(this)"></cm_select>
+            </div>
+        </div>
+        <div class="listButtonAction" align="right">
+            <button mat-raised-button transloco="system.search" class="dark:bg-teal-900 ring-white ring-2 dark:hover:bg-teal-700 dark:ring-teal-600 bg-teal-400 text-white shadow-none hover:bg-teal-600" (click)="rerender()"></button>
+            <button mat-raised-button transloco="system.add"  class="dark:bg-primary-900 ring-white ring-2 dark:hover:bg-primary-700 dark:ring-primary-600 bg-primary-600 text-white shadow-none hover:bg-primary-700" (click)="openDialogAdd()"></button>
+        </div>
+    </div>
+
+
+    <br />
+     <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="w-full">
+              <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzData]="listData"  [nzFrontPagination]="false" [nzLoading]="pageLoading"
+                        [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+                        (nzQueryParams)="onQueryParamsChange($event)">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th transloco="system.no_" style="max-width:50px"></th>
+                        <th transloco="system.name"></th>
+                        <th transloco="system.opcclient"></th>
+                        <th transloco="system.create_by"></th>
+                        <th transloco="system.create_date"></th>
+                        <th transloco="system.note"></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listData;  index as i;">
+                        <td>
+                            <button class="mat-button-action" mat-button [matMenuTriggerFor]="menu" transloco="system.feature" class="bg-gray-200 text-gray-800 shadow-none dark:bg-gray-800 dark:hover:bg-gray-900 dark:text-white"></button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item transloco="view" (click)="openDialogDetail(item,i)"></button>
+                                <button mat-menu-item transloco="system.edit" (click)="openDialogEdit(item,i)"></button>
+                                <button mat-menu-item transloco="system.test_connect" (click)="testConnect(item,i)"></button>
+                                <button mat-menu-item transloco="system.browse" (click)="browerNode(item,i)"></button>
+                                <button mat-menu-item transloco="system.delete" (click)="delete(item.db.id)"></button>
+                            </mat-menu>
+                        </td>
+                        <td>{{currentIndex+ i+1 }}</td>
+                        <td>{{ item.db.name }}</td>
+                        <td>{{ item.db.opc_client }}</td>
+                        <td>{{ item.createby_name }}</td>
+                        <td>{{ item.db.create_date | date: 'dd/MM/yyyy HH:mm' }}</td>
+                        <td>{{ item.db.note }}</td>
+
+                    </tr>
+                </tbody>
+
+            </nz-table>
+        </div>
+
+    </div>
+</div>
+</div></div>

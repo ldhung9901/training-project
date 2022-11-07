@@ -1,0 +1,57 @@
+<ng-container *transloco="let t">
+    <div class="flex flex-col w-96 flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+
+        <!-- Header -->
+        <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+            <div class="text-lg font-medium" transloco="NAV.sys_approval"></div>
+        </div>
+        <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+             <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+                <div class="flex flex-col">
+                    <div class="flex-1">
+                        <cm_select [errorModel]="errorModel" [keyError]="'db.id_sys_approval_config'"
+                            [label]="'NAV.sys_approval'" [listData]="listData_sys_approval"
+                            [(objectChose)]="item_sys_approval_config"
+                            [callbackChange]="bind_sys_approval_config.bind(this)"
+                            [(model)]="record.db.id_sys_approval_config"></cm_select>
+                    </div>
+                    <div class="flex-1">
+                        <div class="w-full">
+                            <nz-table nzBordered nzSize="small" #basicTable1 [nzLoading]="loading" nzShowPagination="true"
+                                [(nzData)]="item_sys_approval_config.list_item">
+                                <thead>
+                                    <tr>
+                                        <th>{{t('no_')}}</th>
+                                        <th>{{t('common.step_num')}}</th>
+                                        <th>{{t('common.step_name')}}</th>
+                                        <th>{{t('common.user_name')}}</th>
+                                        <th>{{t('common.duration_hours')}}</th>
+                                        <th>{{t('note')}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of basicTable1.data;  index as i;">
+                                        <td>{{ i+1 }}</td>
+                                        <td>{{ item.db.step_num }}</td>
+                                        <td>{{ item.db.name }}</td>
+                                        <td>{{ item.user_name }}</td>
+                                        <td align="right">{{ item.db.duration_hours | number }}</td>
+                                        <td>{{ item.db.note }}</td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="flex flex-row justify-end space-x-2 mt-5">
+                <button [disabled]="loading" mat-raised-button
+                    class="ring-white ring-2 bg-primary text-white shadow-none"
+                    (click)="save()">{{t('send_approval')}}</button>
+                <button [disabled]="loading" mat-raised-button (click)="close()">{{t('close')}}</button>
+            </div>
+        </div>
+    </div>
+
+</ng-container>

@@ -1,0 +1,124 @@
+<mat-progress-bar *ngIf="pageLoading" mode="indeterminate" class="absolute top-0"></mat-progress-bar>
+<div class="flex flex-col flex-auto min-w-0 ">
+    <!-- Main -->
+    <div class="flex-auto p-3 sm:pt-3 sm:p-10">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+            <h1 mat-dialog-title class="dark:text-white" transloco="NAV.sys_mongodb_user_auth_log"></h1>
+            <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <cm_select [listData]="listSelectOptionDate"
+                            [callbackChange]="bindingSelectOptionDate.bind(this,'select')"
+                            [(model)]="filter.range.type">
+                        </cm_select>
+                    </div>
+                    <div class="flex-2">
+                        <cm_input [type]="'daterangepicker'"
+                            [callbackChange]="bindingSelectOptionDate.bind(this,'datepicker')" [(model)]="filter.range">
+                        </cm_input>
+                    </div>
+                    <div class="flex-2">
+                        <mat-form-field class="w-full">
+                            <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'">
+                            </mat-icon>
+
+                            <input matInput [(ngModel)]="filter.search" (keyup.enter)="rerender()" placeholder="{{'search' | transloco}} ({{ 'system.account_log' | transloco }} | {{
+                                    'system.user_name_log' |
+                                    transloco }})">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-2"></div>
+                    <button mat-stroked-button (click)="openPanel()" #filterMoreOrigin>
+                        <mat-icon class="mr-2" svgIcon="heroicons_outline:filter"></mat-icon>
+                        <label transloco="system.filter_more"></label>
+                    </button>
+                    <ng-template #filterMorePanel>
+                        <div
+                            class="mat-elevation-z4 sm:mt-2 fixed inset-0 sm:static sm:inset-auto flex flex-col sm:min-w-90 sm:w-90 overflow-hidden bg-white">
+                            <!-- Header -->
+                            <div class="flex flex-shrink-0 items-center py-2 pr-4 pl-6 border-b-2">
+                                <div class="sm:hidden -ml-1 mr-3">
+                                    <button mat-icon-button (click)="closePanel()">
+                                        <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:x'">
+                                        </mat-icon>
+                                    </button>
+                                </div>
+                                <div class="text-lg font-medium leading-10">{{ 'filter_custom'| transloco}}</div>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="flex flex-col sm:max-h-140 overflow-y-auto bg-card p-6 flex-wrap">
+                                <div class="flex-1">
+                                    <cm_select [label]="'system.customer'" [listData]="listCustomer"
+                                        [(model)]="filter.id_customer">
+                                    </cm_select>
+                                </div>
+                                <div class="flex-1">
+                                    <cm_sys_approval_filter [(model)]="filter.id_approval_status">
+                                    </cm_sys_approval_filter>
+                                </div>
+                                <div>
+                                    <div class="listButtonAction" [align]="'right'">
+                                        <button mat-stroked-button (click)="cleanFilter()">
+                                            <label transloco="system.clean_filter"></label>
+                                        </button>
+                                        <button mat-raised-button [color]="'primary'" (click)="closePanelAfterFilter()">
+                                            <label transloco="system.filter"></label>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+                <br />
+
+                <div class="w-full">
+                    <nz-table #expandTable nzBordered nzSize="small" nzShowSizeChanger [nzData]="listData"
+                        [nzFrontPagination]="false" [nzLoading]="pageLoading" [nzTotal]="total" [nzPageSize]="pageSize"
+                        [nzPageIndex]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)">
+                        <thead>
+                            <tr>
+                                <th [nzWidth]="'150px'"></th>
+                                <th transloco="system.account_log" [nzWidth]="'200px'"></th>
+                                <th transloco="system.user_name_log"></th>
+                                <th [nzAlign]="'center'" transloco="system.login_log" [nzWidth]="'150px'"></th>
+                                <th [nzAlign]="'center'" transloco="system.logout_log" [nzWidth]="'150px'"></th>
+                                <th [nzAlign]="'center'" transloco="system.ip_address_log" [nzWidth]="'200px'"></th>
+                                <th [nzAlign]="'center'" transloco="system.device_name" [nzWidth]="'200px'"></th>
+                                <th [nzWidth]="'100px'"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let data of listData">
+                                <ng-container *ngFor="let item of listMapTree[data.key]">
+                                    <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                                        <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="item.children"
+                                            [(nzExpand)]="item.expand"
+                                            (nzExpandChange)="collapse(listMapTree[data.key], item, $event)">
+                                            {{ item.name }}
+                                        </td>
+                                        <td>{{ item.account }}</td>
+                                        <td>{{ item.user_name }}</td>
+                                        <td [nzAlign]="'center'">{{ item.login_time | date: 'HH:mm' }}</td>
+                                        <td [nzAlign]="'center'">{{ item.logout_time | date: 'HH:mm' }}</td>
+                                        <td [nzAlign]="'center'">{{ item.device_ip_address }}</td>
+                                        <td [nzAlign]="'center'">{{ item.device_name }}</td>
+                                        <td [nzAlign]="'center'">
+                                            <button *ngIf="item.account" (click)="openDialogDetail(item.id)">
+                                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'">
+                                                </mat-icon>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </tbody>
+                    </nz-table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

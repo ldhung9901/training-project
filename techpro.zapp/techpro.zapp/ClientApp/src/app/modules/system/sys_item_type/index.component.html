@@ -1,0 +1,114 @@
+<mat-progress-bar *ngIf="pageLoading" mode="indeterminate" class="absolute top-0"></mat-progress-bar>
+<div class="flex flex-col flex-auto min-w-0 ">
+
+    <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between mb-6 px-6 sm:py-4
+         md:px-8 border-b bg-card dark:bg-transparent">
+        <div class="text-3xl font-bold tracking-tight leading-none">
+            {{_translocoService.translate('NAV.sys_item_type')}}
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <!--add button -->
+            <button class="mr-3" (click)="openDialogAdd()" mat-flat-button [color]="'primary'">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'" class="mr-2"></mat-icon>
+                <label transloco="add"></label>
+            </button>
+
+            <!-- export_excel -->
+            <button mat-flat-button
+                class="dark:bg-teal-900 ring-white ring-2 dark:hover:bg-teal-700 dark:ring-teal-600 bg-teal-400 text-white shadow-none hover:bg-teal-600"
+                (click)="generateExcel()">
+                <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:save'"></mat-icon>
+                         <label transloco="export_excel"></label>
+            </button>
+        </div>
+    </div>
+    <!-- Main -->
+    <div class="flex-auto p-3 sm:pt-3 sm:p-10">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+    <!-- <h1 mat-dialog-title class="dark:text-white" transloco="NAV.sys_item_type"></h1> -->
+     <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+            <div class="flex-1">
+                <mat-form-field   class="w-full"
+                    >
+                    <mat-label>
+                        {{'search' | transloco}} ({{ 'system.name' | transloco }} | {{ 'system.note' | transloco }})
+                    </mat-label>
+                    <input matInput [(ngModel)]="filter.search" (keyup.enter)="rerender()">
+
+                </mat-form-field>
+            </div>
+            <div class="flex-1">
+                <cm_select [label]="'system.use_status'" [listData]="listStatusDel" [(model)]="filter.status_del"
+                    [callbackChange]="rerender.bind(this)"></cm_select>
+            </div>
+        </div>
+        <!-- <div class="listButtonAction" align="right">
+            <button mat-raised-button transloco="system.search" class="dark:bg-teal-900 ring-white ring-2 dark:hover:bg-teal-700 dark:ring-teal-600 bg-teal-400 text-white shadow-none hover:bg-teal-600" (click)="rerender()"></button>
+            <button mat-raised-button transloco="system.add"  class="dark:bg-primary-900 ring-white ring-2 dark:hover:bg-primary-700 dark:ring-primary-600 bg-primary-600 text-white shadow-none hover:bg-primary-700" (click)="openDialogAdd()"></button>
+
+        </div> -->
+
+    </div>
+
+    <br />
+     <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="w-full">
+             <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzData]="listData"  [nzFrontPagination]="false" [nzLoading]="pageLoading"
+                        [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+                        (nzQueryParams)="onQueryParamsChange($event)">
+                <thead>
+                    <tr>
+                        <th style="width:75px"></th>
+                        <th transloco="system.no_" style="width:50px; text-align:center"></th>
+                        <th transloco="system.name_item_type"></th>
+                        <th transloco="system.create_by"></th>
+                        <th transloco="system.create_date"></th>
+                        <th transloco="system.code"></th>
+                        <th transloco="system.note"></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listData;  index as i;">
+                        <td>
+                            <button class="justify-self-center" mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'">
+                                </mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item  (click)="openDialogDetail(item,i)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                                            <span transloco="view"></span>
+                                </button>
+                                <button mat-menu-item  (click)="openDialogEdit(item,i)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'">
+                                    </mat-icon>
+                                    <span transloco="edit"></span>
+                                </button>
+                                <button mat-menu-item  (click)="delete(item.db.id)">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'">
+                                    </mat-icon>
+                                    <span transloco="delete"></span>
+                                </button>
+                            </mat-menu>
+                        </td>
+                        <td style="text-align:center">{{currentIndex+ i+1 }}</td>
+                        <td>{{ item.db.name }}</td>
+
+
+                        <td>{{ item.createby_name }}</td>
+                        <td>{{ item.db.create_date | date: 'dd/MM/yyyy HH:mm' }}</td>
+                        <td>{{ item.db.item_type_code }}</td>
+                        <td>{{ item.db.note }}</td>
+
+                    </tr>
+                </tbody>
+
+            </nz-table>
+        </div>
+    </div>
+
+</div>
+</div></div>

@@ -1,0 +1,101 @@
+<mat-progress-bar *ngIf="pageLoading" mode="indeterminate" class="absolute top-0"></mat-progress-bar>
+<div class="flex flex-col flex-auto min-w-0 ">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between mb-6 px-6 sm:py-4
+         md:px-8 border-b bg-card dark:bg-transparent">
+        <div class="text-3xl font-bold tracking-tight leading-none">
+            {{_translocoService.translate('NAV.sys_version')}}
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <!--add button -->
+            <button (click)="openDialogAdd()" mat-flat-button [color]="'primary'">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'" class="mr-2"></mat-icon>
+                <label transloco="add"></label>
+            </button>
+        </div>
+    </div>
+    <!-- Main -->
+    <div class="flex-auto p-3 sm:pt-3 sm:p-10">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+            <!-- <h1 mat-dialog-title class="dark:text-white" transloco="NAV.sys_version"></h1> -->
+            <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <cm_select [listData]="listSelectOptionDate"
+                            [callbackChange]="bindingSelectOptionDate.bind(this,'select')"
+                            [(model)]="filter.range.type">
+                        </cm_select>
+                    </div>
+                    <div class="flex-2">
+                        <cm_input [type]="'daterangepicker'" (keyup.enter)="rerender.bind(this)"
+                            [callbackChange]="bindingSelectOptionDate.bind(this,'datepicker')" [(model)]="filter.range">
+                        </cm_input>
+                    </div>
+                    <div class="flex-2">
+                        <mat-form-field class="w-full">
+                            <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'">
+                            </mat-icon>
+
+                            <input matInput [(ngModel)]="filter.search" (keyup.enter)="rerender()"
+                                placeholder="{{'search' | transloco}} ({{ 'NAV.version' | transloco }} )">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-2"></div>
+                </div>
+
+                <br />
+
+                <div class="w-full">
+                    <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzData]="listData"
+                        [nzFrontPagination]="false" [nzLoading]="pageLoading" [nzTotal]="total" [nzPageSize]="pageSize"
+                        [nzPageIndex]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)">
+                        <thead>
+                            <tr>
+                                <th style="width:75px"></th>
+                                <th transloco="system.no_" style="width:50px; text-align:center"></th>
+                                <th transloco="NAV.version"></th>
+                                <th transloco="release_day"></th>
+                                <th transloco="system.create_date"></th>
+                                <th transloco="system.create_by"></th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of listData;  index as i;">
+                                <td>
+                                    <button class="justify-self-center" mat-icon-button [matMenuTriggerFor]="menu">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'">
+                                        </mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="openDialogDetail(item,i)">
+                                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                                            <span transloco="view"></span>
+                                        </button>
+                                        <button mat-menu-item (click)="openDialogEdit(item,i)">
+                                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'">
+                                            </mat-icon>
+                                            <span transloco="edit"></span>
+                                        </button>
+                                        <!-- <button *ngIf="item.db.status_del==2" mat-menu-item transloco="system.revert"
+                                                (click)="revertStatus(item.db.id)"></button>
+                                        <button *ngIf="item.db.status_del==1" mat-menu-item transloco="delete"
+                                                (click)="delete(item.db.id)"></button> -->
+                                    </mat-menu>
+                                </td>
+                                <td style="text-align:center">{{currentIndex+ i+1 }}</td>
+                                <td>{{ item.db.version }}</td>
+                                <td>{{ item.db.release_day | date: 'dd/MM/yyyy' }}</td>
+                                <td>{{ item.db.create_date | date: 'dd/MM/yyyy HH:mm' }}</td>
+                                <td>{{ item.createby_name }}</td>
+
+                            </tr>
+                        </tbody>
+
+                    </nz-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

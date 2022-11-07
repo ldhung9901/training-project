@@ -1,0 +1,41 @@
+<div class="flex flex-col flex-auto min-w-screen-60 max-h-screen-95 -m-6 overflow-y-auto">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium" > <span transloco="NAV.sys_item_bom"></span>:
+            &nbsp;<span>1</span>
+                  <span>{{record.unit_name}}</span>
+            &nbsp; <span>{{record.name}}</span></div>
+    </div>
+
+    <!-- Card form -->
+    <div class="w-full p-6 sm:p-8 space-y-1 overflow-y-auto bg-slate-100">
+        <mat-form-field>
+            <input matInput placeholder="Search" (input)="filterChanged($event.target.value)">
+        </mat-form-field>
+        <br/>
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+                {{node.index_string}} {{node.sys_item_bom_name}} :
+                {{node.quota_cal}}  {{node.sys_item_bom_unit_name}}
+            </mat-tree-node>
+            <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                <button mat-icon-button matTreeNodeToggle
+                        [attr.aria-label]="'toggle ' + node.index_string">
+                    <mat-icon class="mat-icon-rtl-mirror">
+                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                    </mat-icon>
+                </button>
+                {{node.index_string}} {{node.sys_item_bom_name}} :
+                {{node.quota_cal}}  {{node.sys_item_bom_unit_name}}
+
+
+            </mat-tree-node>
+        </mat-tree>
+<br/>
+        <div class="flex flex-row justify-end space-x-2">
+            <button [disabled]="loading" mat-raised-button (click)="close()" transloco="system.close"></button>
+        </div>
+    </div>
+</div>
+

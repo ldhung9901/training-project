@@ -1,0 +1,180 @@
+<mat-progress-bar *ngIf="pageLoading" mode="indeterminate" class="absolute top-0"></mat-progress-bar>
+<div class="flex flex-col flex-auto min-w-0 ">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between mb-6 px-6 sm:py-4
+         md:px-8 border-b bg-card dark:bg-transparent">
+        <div class="text-3xl font-bold tracking-tight leading-none">
+            {{_translocoService.translate('NAV.sys_item')}}
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <!--add button -->
+            <button class="mr-3" (click)="openDialogAdd()" mat-flat-button [color]="'primary'">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'" class="mr-2"></mat-icon>
+                <label transloco="add"></label>
+            </button>
+
+        </div>
+    </div>
+    <!-- Main -->
+    <div class="flex-auto p-3 sm:pt-3 sm:p-10">
+        <!-- CONTENT GOES HERE -->
+        <div class="rounded-2xl">
+            <div class="p-6 bg-card shadow rounded-2xl overflow-hidden">
+
+                <div class="flex flex-col md:flex-row lg:flex-row md:space-x-4 flex-wrap">
+                    <div class="flex-1">
+                        <mat-form-field class="w-full">
+                            <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                            <input matInput [(ngModel)]="filter.search" (keyup.enter)="rerender()"
+                                placeholder="{{'system.search_item'|transloco}}">
+
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-2">
+
+                    </div>
+                    <div>
+                        <div class="listButtonAction float-right">
+                            <button mat-stroked-button (click)="openPanel()" #filterMoreOrigin>
+                                <mat-icon class="mr-2" svgIcon="heroicons_outline:filter"></mat-icon>
+                                <label transloco="system.filter_more"></label>
+                            </button>
+
+                            <ng-template #filterMorePanel>
+                                <div
+                                    class="mat-elevation-z4 sm:mt-2 fixed inset-0 sm:static sm:inset-auto flex flex-col sm:min-w-90 sm:w-90 overflow-hidden bg-white">
+                                    <!-- Header -->
+                                    <div class="flex flex-shrink-0 items-center py-2 pr-4 pl-6 border-b-2">
+                                        <div class="sm:hidden -ml-1 mr-3">
+                                            <button mat-icon-button (click)="closePanel()">
+                                                <mat-icon class="icon-size-5 text-current"
+                                                    [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                                            </button>
+                                        </div>
+                                        <div class="text-lg font-medium leading-10">{{ 'filter_custom'| transloco}}
+                                        </div>
+                                    </div>
+
+                                    <!-- Content -->
+                                    <div class="flex flex-col sm:max-h-120 overflow-y-auto bg-card p-6 flex-wrap">
+                                        <div class="flex-1">
+                                            <cm_select [label]="'system.use_status'" [listData]="listStatusDel"
+                                                [(model)]="filter.status_del">
+                                            </cm_select>
+                                        </div>
+                                        <div class="flex-1">
+                                            <cm_select [listData]="listSysItemType" [label]="'system.material_group'"
+                                                [(model)]="filter.id_item_type">
+                                            </cm_select>
+                                        </div>
+                                        <div>
+                                            <div class="listButtonAction" [align]="'right'">
+                                                <button mat-stroked-button (click)="cleanFilter()">
+                                                    <label transloco="system.clean_filter"></label>
+                                                </button>
+                                                <button mat-raised-button [color]="'primary'" (click)="closePanelAfterFilter()">
+                                                    <label transloco="system.filter"></label>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </ng-template>
+
+                            <!-- <button mat-raised-button color="primary">
+                                <mat-icon class="mr-2" svgIcon="heroicons_outline:upload"></mat-icon>
+                                <label transloco="system.import"></label>
+                            </button> -->
+                            <button mat-raised-button color="primary" (click)="generateExcel()">
+                                <mat-icon class="mr-2" svgIcon="heroicons_outline:download"></mat-icon>
+                                <label transloco="system.export"></label>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="w-full">
+                    <nz-table nzBordered nzSize="small" nzShowSizeChanger [nzData]="listData"
+                        [nzFrontPagination]="false" [nzLoading]="pageLoading" [nzTotal]="total" [nzPageSize]="pageSize"
+                        [nzPageIndex]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)">
+                        <thead>
+                            <tr>
+                                <th transloco="system.material_group"></th>
+                                <th style="width:75px"></th>
+                                <th transloco="system.code_item"></th>
+                                <th transloco="system.item_name"></th>
+                                <th transloco="system.unit_price_vnd" [nzAlign]="'right'"></th>
+                                <th transloco="system.stock_inventory" [nzAlign]="'center'"></th>
+                                <!-- <th transloco="NAV.sys_unit"></th> -->
+                                <!--Đơn vị tính-->
+                                <th transloco="system.cost_code"></th>
+                                <th transloco="system.note"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let data of listData">
+                                <ng-container *ngFor="let item of listMapTree[data.key]">
+                                    <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                                        <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="item.children"
+                                            [(nzExpand)]="item.expand"
+                                            (nzExpandChange)="collapse(listMapTree[data.key], item, $event)">
+                                            <span *ngIf="item.name==1" transloco="system.product"></span>
+                                            <span *ngIf="item.name==2" transloco="system.semi_product"></span>
+                                            <span *ngIf="item.name==3" transloco="system.supplies"></span>
+                                            <span *ngIf="item.name==4" transloco="NAV.tool"></span>
+                                        </td>
+                                        <td >
+                                            <button class="justify-self-center" mat-icon-button *ngIf="item.db?.code_item"
+                                                [matMenuTriggerFor]="menu">
+                                                <mat-icon class="icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:dots-vertical'">
+                                                </mat-icon>
+                                            </button>
+                                            <mat-menu #menu="matMenu">
+                                                <button mat-menu-item (click)="openDialogDetail(item,i)">
+                                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'">
+                                                    </mat-icon>
+                                                    <span transloco="view"></span>
+                                                </button>
+                                                <button mat-menu-item (click)="openDialogEdit(item,i)">
+                                                    <mat-icon class="icon-size-5"
+                                                        [svgIcon]="'heroicons_solid:pencil-alt'">
+                                                    </mat-icon>
+                                                    <span transloco="edit"></span>
+                                                </button>
+                                                <button *ngIf="item.db?.status_del==2" mat-menu-item
+                                                    (click)="revertStatus(item,i)">
+                                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'">
+                                                    </mat-icon>
+                                                    <span transloco="system.revert"></span>
+                                                </button>
+                                                <button *ngIf="item.db?.status_del==1" mat-menu-item
+                                                    (click)="delete(item.db.id)">
+                                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'">
+                                                    </mat-icon>
+                                                    <span transloco="delete"></span>
+                                                </button>
+                                            </mat-menu>
+                                        </td>
+                                        <td>{{ item.db?.code_item }}</td>
+                                        <td>{{ item.db?.name }}</td>
+                                        <td [nzAlign]="'right'">{{ item.db?.price|currency_vnd}}</td>
+                                        <td [nzAlign]="'center'">
+                                            {{item.inventory_quantity}}
+                                        </td>
+                                        <!-- <td>{{ item.sys_unit_name }}</td> -->
+                                        <td>{{ item.sys_cost_type_code }}</td>
+                                        <td>{{ item.db?.note }}</td>
+
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
