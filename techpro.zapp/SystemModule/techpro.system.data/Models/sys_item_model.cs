@@ -42,7 +42,6 @@ namespace techpro.system.data.Models
             db = new sys_item_min_max_stock_db();
         }
 
-        public string sys_warehouse_name { get; set; }
         public sys_item_min_max_stock_db db { get; set; }
     }
     public class sys_item_quality_model

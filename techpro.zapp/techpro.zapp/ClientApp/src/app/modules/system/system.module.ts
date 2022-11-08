@@ -27,16 +27,12 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { sys_unit_popUpAddComponent } from './sys_unit/popupAdd.component';
 import { sys_item_type_indexComponent } from './sys_item_type/index.component';
 import { sys_item_type_popUpAddComponent } from './sys_item_type/popupAdd.component';
-import { sys_warehouse_indexComponent } from './sys_warehouse/index.component';
-import { sys_warehouse_popUpAddComponent } from './sys_warehouse/popupAdd.component';
 import { sys_approval_config_indexComponent } from './sys_approval_config/index.component';
 import { sys_approval_config_popUpAddComponent } from './sys_approval_config/popupAdd.component';
 import { sys_group_user_indexComponent } from './sys_group_user/index.component';
 import { sys_group_user_popUpAddComponent } from './sys_group_user/popupAdd.component';
 import { sys_user_indexComponent } from './sys_user/index.component';
 import { sys_user_popUpAddComponent } from './sys_user/popupAdd.component';
-import { sys_warehouse_position_indexComponent } from './sys_warehouse_position/index.component';
-import { sys_warehouse_position_popUpAddComponent } from './sys_warehouse_position/popupAdd.component';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { sys_item_indexComponent } from './sys_item/index.component';
 import { sys_item_popUpAddComponent } from './sys_item/popupAdd.component';
@@ -163,8 +159,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
         sys_item_indexComponent,
         sys_item_popUpAddComponent,
         sys_item_popUpAddDetailComponent,
-        sys_warehouse_indexComponent,
-        sys_warehouse_popUpAddComponent,
         sys_approval_config_indexComponent,
         sys_approval_config_popUpAddComponent,
         sys_group_user_indexComponent,
@@ -172,8 +166,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
         sys_user_indexComponent,
         sys_work_schedule_factory_lineindexComponent,
         sys_user_popUpAddComponent,
-        sys_warehouse_position_indexComponent,
-        sys_warehouse_position_popUpAddComponent,
         sys_factory_indexComponent,
         sys_factory_popUpAddComponent,
         sys_factory_line_indexComponent,

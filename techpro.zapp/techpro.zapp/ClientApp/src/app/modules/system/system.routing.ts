@@ -26,8 +26,6 @@ import { sys_template_opc_param_indexComponent } from './sys_template_opc_param/
 import { sys_unit_indexComponent } from './sys_unit/index.component';
 import { sys_user_indexComponent } from './sys_user/index.component';
 import { sys_vendor_item_indexComponent } from './sys_vendor_item/index.component';
-import { sys_warehouse_indexComponent } from './sys_warehouse/index.component';
-import { sys_warehouse_position_indexComponent } from './sys_warehouse_position/index.component';
 import { sys_workstation_indexComponent } from './sys_workstation/index.component';
 import { sys_workstation_template_opc_indexComponent } from './sys_workstation_template_opc/index.component';
 import { sys_work_schedule_factory_lineindexComponent } from './sys_work_schedule_factory_line/index.component';
@@ -68,14 +66,6 @@ export const systemsRoutes: Route[] = [
     {
         path: 'sys_item_type_index',
         component: sys_item_type_indexComponent
-    },
-    {
-        path: 'sys_warehouse_index',
-        component: sys_warehouse_indexComponent
-    },
-    {
-        path: 'sys_warehouse_position_index',
-        component: sys_warehouse_position_indexComponent
     },
     {
         path: 'sys_item_index',

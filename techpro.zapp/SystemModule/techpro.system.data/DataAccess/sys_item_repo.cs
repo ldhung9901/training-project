@@ -44,7 +44,6 @@ namespace techpro.system.data.DataAccess
                 .Where(t => t.id_item == id)
                 .Select(d => new sys_item_min_max_stock_model()
                 {
-                    sys_warehouse_name = _context.sys_warehouses.Where(t => t.id == d.id_warehouse).Select(d => d.name).SingleOrDefault(),
                     db = d,
                 });
 
@@ -217,14 +216,7 @@ namespace techpro.system.data.DataAccess
             return result;
         }
 
-        public async Task caculate_report_inventory_item()
-        {
-            var list_inventory = _context.sys_warehouses.Where(t => t.status_del == 1).ToList();
 
-            DateTime date_now = DateTime.Now;
-
-            
-        }
 
         public int delete(string id, string userid)
         {

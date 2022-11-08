@@ -183,7 +183,6 @@ namespace techpro.system.web.Controller
                 var status_del = int.Parse(dictionary["status_del"]);
                 var id_item_type = dictionary["id_item_type"];
                 var search = dictionary["search"];
-                await repo.caculate_report_inventory_item();//Tạo ra báo cáo tồn kho
                 var query = repo.FindAll()
                      //.Where(d=>d.db.status_del==1)
                      .Where(d => d.db.name.Contains(search) || d.sys_cost_type_name.Contains(search) || d.sys_item_type_name.Contains(search))

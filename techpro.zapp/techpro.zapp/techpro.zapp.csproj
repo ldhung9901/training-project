@@ -40,11 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\app\Authenticator\" />
-    <Folder Include="ClientApp\src\app\main\system\sys_item\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SystemModule\techpro.system.data\techpro.system.data.csproj" />
     <ProjectReference Include="..\SystemModule\techpro.system.web\techpro.system.web.csproj" />
     <ProjectReference Include="..\techpro.common\techpro.common.csproj" />

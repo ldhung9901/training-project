@@ -14,8 +14,7 @@ namespace techpro.DataBase.Provider
         public virtual DbSet<sys_unit_db> sys_units { get; set; }
         public virtual DbSet<sys_phase_db> sys_phases { get; set; }
         public virtual DbSet<sys_customer_db> sys_customers { get; set; }
-
-        public virtual DbSet<sys_warehouse_db> sys_warehouses { get; set; }
+        
         public virtual DbSet<sys_factory_db> sys_factorys { get; set; }
         public virtual DbSet<sys_factory_line_db> sys_factory_lines { get; set; }
         public virtual DbSet<sys_factory_line_item_capacity_db> sys_factory_line_item_capacitys { get; set; }
@@ -24,7 +23,6 @@ namespace techpro.DataBase.Provider
         public virtual DbSet<sys_group_user_db> sys_group_users { get; set; }
         public virtual DbSet<sys_group_user_detail_db> sys_group_user_details { get; set; }
         public virtual DbSet<sys_group_user_role_db> sys_group_user_roles { get; set; }
-        public virtual DbSet<sys_warehouse_position_db> sys_warehouse_positions { get; set; }
         public virtual DbSet<sys_item_type_db> sys_item_types { get; set; }
         public virtual DbSet<sys_delivery_type_db> sys_delivery_types { get; set; }
         public virtual DbSet<sys_receiving_type_db> sys_receiving_types { get; set; }

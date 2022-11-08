@@ -20,8 +20,6 @@ namespace techpro.system.web.MenuAndRole
             sys_receiving_typeController.declare,
             sys_delivery_typeController.declare,
             sys_cost_typeController.declare,
-            sys_warehouseController.declare,
-            sys_inventory_position_item_capacityController.declare,
             sys_factoryController.declare,
             sys_factory_lineController.declare,
             sys_factory_line_item_capacityController.declare,
